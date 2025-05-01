@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export interface ILike{
     postId?: mongoose.Types.ObjectId;
     userId?: mongoose.Types.ObjectId;
-    ReelId: mongoose.Types.ObjectId;
+    reelId: mongoose.Types.ObjectId;
     isLike: boolean;
 }
 const likeSchema = new mongoose.Schema<ILike>({
@@ -16,7 +16,7 @@ const likeSchema = new mongoose.Schema<ILike>({
         ref: "User",
         required: true,
     },
-    ReelId:{
+    reelId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Reel",
     },
