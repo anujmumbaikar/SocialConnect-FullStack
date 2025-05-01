@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <div className="flex min-h-screen">
-            <AppSidebar />
+            <AppSidebar/>
             <main className="flex-1 p-4 overflow-y-auto">{children}</main>
           </div>
         </SidebarProvider>
