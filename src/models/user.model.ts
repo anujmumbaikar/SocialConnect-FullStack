@@ -1,16 +1,19 @@
-import mongoose,{Schema,Document} from 'mongoose';
+import mongoose,{Schema,Document, models, model} from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 export interface IUser{
     username:string;
     email:string;
-    password:string;
+    password?:string;  //if google login, password is not required
     address?:string;
     phone?:string;
     avatar?:string;
+    provider:"credential" | "google" | "facebook" | "github";
     verificationCode:string;
     verificationCodeExpires:Date;
     isVerified:boolean;
+    createdAt?:Date;
+    updatedAt?:Date;
 }
 const userSchema = new Schema<IUser>({
    email:{
@@ -30,9 +33,16 @@ const userSchema = new Schema<IUser>({
     }, 
     password:{
      type:String,
-     required:[true,"Password is required"],
+     required:function(){
+        return this.provider === "credential";
+     },
      minLength:6,
      maxLength:20
+    },
+    provider:{
+        type:String,
+        enum:["credential","google","facebook","github"],
+        default:"credential"
     },
     address:{
      type:String,
@@ -63,4 +73,12 @@ const userSchema = new Schema<IUser>({
 },{
     timestamps:true
 });
+userSchema.pre("save",async function(next){
+    if(this.isModified("password") && this.password && this.provider === "credential"){
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
+const User = models?.User || model<IUser>("User",userSchema);
+export default User;
 
