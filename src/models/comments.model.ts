@@ -1,16 +1,15 @@
 import mongoose from "mongoose";
 
 export interface IComments{
-    postId: mongoose.Types.ObjectId;
+    postId?: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
-    reelId: mongoose.Types.ObjectId;
+    reelId?: mongoose.Types.ObjectId;
     comment: string;
 }
 const commentsSchema = new mongoose.Schema<IComments>({
     postId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
-        required: true,
     },
     userId:{
         type: mongoose.Schema.Types.ObjectId,
@@ -20,7 +19,6 @@ const commentsSchema = new mongoose.Schema<IComments>({
     reelId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Reel",
-        required: true,
     },
     comment:{
         type: String,
