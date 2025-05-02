@@ -12,8 +12,6 @@ export default function ExplorePage() {
           <h1 className="text-xl font-semibold">Explore</h1>
         </div>
       </div>
-
-      {/* Grid Container - Center with max-width */}
       <div className="flex justify-center px-0 py-0">
         <div className="w-full max-w-screen-lg">
           {/* Instagram-style grid - exactly 3 columns with tiny gaps */}
