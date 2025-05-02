@@ -15,9 +15,9 @@ export default function ExplorePage() {
       <div className="flex justify-center px-0 py-0">
         <div className="w-full max-w-screen-lg">
           {/* Instagram-style grid - exactly 3 columns with tiny gaps */}
-          <div className="grid grid-cols-3 gap-1">
+          <div className="grid grid-cols-3 gap-5">
             {[...Array(30)].map((_, i) => (
-              <div key={i} className="aspect-square relative group cursor-pointer">
+              <div key={i} className="aspect-square relative group cursor-pointer bg-gray-300 rounded-2xl">
                 <img
                   src={`https://source.unsplash.com/random/900x900?sig=${i}`}
                   alt={`Explore ${i}`}
