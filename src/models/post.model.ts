@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-export const VIDEO_DIMENSIONS = {
+export const POST_DIMENSIONS = {
     width: 1080,
     height: 1920,
 } as const;
@@ -32,11 +32,11 @@ const postSchema = new mongoose.Schema<IPost>({
     transformation:{
         height: {
             type: Number,
-            default: VIDEO_DIMENSIONS.height,
+            default: POST_DIMENSIONS.height,
         },
         width: {
             type: Number,
-            default: VIDEO_DIMENSIONS.width,
+            default: POST_DIMENSIONS.width,
         },
         quality:{
             type: Number,

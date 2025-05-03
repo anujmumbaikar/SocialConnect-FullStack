@@ -18,7 +18,8 @@ export default function ProfilePage() {
     signOut()
   }
 
-  const isOwnProfile = session?.user?.username === username
+  // const isOwnProfile = session?.user?.username === username
+  const isOwnProfile = true // For demo purposes, assume it's own profile
 
   return (
     <div className="w-[82vw] flex mx-auto px-4 py-6">
@@ -40,7 +41,7 @@ export default function ProfilePage() {
               <div className="flex gap-2">
                 {isOwnProfile ? (
                   <>
-                    <button className="bg-gray-100 text-black px-4 py-1 rounded-md text-sm font-medium">
+                    <button className="bg-gray-100 text-black px-4 py-1 rounded-md text-sm font-medium" onClick={()=> router.push(`/${username}/edit-profile`)}>
                       Edit Profile
                     </button>
                     <button 
