@@ -3,10 +3,9 @@ import bcrypt from 'bcryptjs';
 
 export interface IUser{
     username:string;
+    fullname?:string;
     email:string;
     password?:string;  //if google login, password is not required
-    address?:string;
-    phone?:string;
     avatar?:string;
     provider:"credential" | "google" | "facebook" | "github";
     verificationCode:string;
@@ -39,6 +38,11 @@ const userSchema = new Schema<IUser>({
      },
      minLength:6,
      maxLength:20
+    },
+    fullname:{
+     type:String,
+     minLength:3,
+     maxLength:50
     },
     provider:{
         type:String,

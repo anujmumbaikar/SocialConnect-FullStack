@@ -14,8 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Note: In your actual implementation, you'll import and use react-hook-form and zod validation
-
 export default function EditProfile() {
   const [avatarSrc, setAvatarSrc] = useState("/api/placeholder/100/100");
   const [charCount, setCharCount] = useState(0);
