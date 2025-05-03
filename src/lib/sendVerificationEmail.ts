@@ -9,7 +9,6 @@ export const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS, // your App Password
   },
 });
-
 const generateEmailHTML = (username: string, otp: string) => {
   return `
     <div>
