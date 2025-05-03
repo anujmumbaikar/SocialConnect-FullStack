@@ -14,6 +14,7 @@ export interface IUser{
     isVerified:boolean;
     createdAt?:Date;
     updatedAt?:Date;
+    gender?:string;
 }
 const userSchema = new Schema<IUser>({
    email:{
@@ -44,14 +45,6 @@ const userSchema = new Schema<IUser>({
         enum:["credential","google","facebook","github"],
         default:"credential"
     },
-    address:{
-     type:String,
-     default:""
-    },
-    phone:{
-     type:String,
-     default:""
-    },
     avatar:{
      type:String,
      default:""
@@ -67,6 +60,9 @@ const userSchema = new Schema<IUser>({
     isVerified:{
      type:Boolean,
      default:false
+    },
+    gender:{
+        type:String,
     }
 },{
     timestamps:true
