@@ -1,66 +1,73 @@
 'use client'
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import {toast} from 'sonner'
+import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import {useDebounceCallback} from 'usehooks-ts'
+import { useDebounceCallback } from 'usehooks-ts'
 import Link from 'next/link'
 import { signUpSchema } from '@/schemas/signUpSchema'
 import axios from 'axios'
-import {Loader2} from 'lucide-react'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Loader2 } from 'lucide-react'
+import { signIn } from 'next-auth/react'
+
+import {
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { FcGoogle } from 'react-icons/fc'
 
-function page() {
-  const [username,setUsername] = React.useState<string>("")
-  const [usernameMessage,setUsernameMessage] = React.useState<string>("")
-  const [isCheckingUsername,setIsCheckingUsername] = React.useState<boolean>(false)
-  const [isSubmitting,setIsSubmitting] = React.useState<boolean>(false)
+function Page() {
+  const [username, setUsername] = React.useState<string>("")
+  const [usernameMessage, setUsernameMessage] = React.useState<string>("")
+  const [isCheckingUsername, setIsCheckingUsername] = React.useState<boolean>(false)
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
-  const debouncedUsername = useDebounceCallback((value: string) => setUsername(value), 500);
+  const debouncedUsername = useDebounceCallback((value: string) => setUsername(value), 500)
 
   const form = useForm<z.infer<typeof signUpSchema>>({
-    resolver:zodResolver(signUpSchema),
-    defaultValues:{
-      username:"",
-      email:"",
-      password:""
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: ""
     }
   })
 
-  useEffect(()=>{
+  useEffect(() => {
     const checkUsernameUniqueness = async () => {
-      if(username){
+      if (username) {
         setIsCheckingUsername(true)
         setUsernameMessage("Checking username...")
         try {
           const response = await axios.get(`/api/check-username-unique?username=${username}`);
           setUsernameMessage(response.data.message);
         } catch (error) {
-          toast.error("Error checking username uniqueness");
+          toast.error("Error checking username uniqueness")
         } finally {
           setIsCheckingUsername(false)
         }
       }
     }
     checkUsernameUniqueness()
-  },[username])
-  const onSubmit = async(data:z.infer<typeof signUpSchema>)=>{
+  }, [username])
+
+  const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setIsSubmitting(true)
     try {
-      const response = await axios.post('/api/sign-up',data)
+      const response = await axios.post('/api/sign-up', data)
       toast.success(response.data.message)
       router.replace(`/verify/${username}`)
     } catch (error) {
       toast.error("Error signing up")
-    }finally{
+    } finally {
       setIsSubmitting(false)
     }
   }
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-800">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
@@ -70,6 +77,8 @@ function page() {
           </h1>
           <p className="mb-4">Join us and start your journey!</p>
         </div>
+
+        {/* Credential Sign Up Form */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
@@ -92,7 +101,10 @@ function page() {
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   <p
-                    className={`text-sm ${usernameMessage === "Username is available" ? "text-green-500" : "text-red-500"}`}
+                    className={`text-sm ${usernameMessage === "Username is available"
+                      ? "text-green-500"
+                      : "text-red-500"
+                      }`}
                   >
                     {usernameMessage}
                   </p>
@@ -100,6 +112,7 @@ function page() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="email"
@@ -108,14 +121,12 @@ function page() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="email" {...field} />
-                    {/* here we have not used onChange because it handle on its own
-                previous we used onChange to set username state because we are handling the case of debouncing
-                 */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="password"
@@ -123,13 +134,14 @@ function page() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="" {...field} />
+                    <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting}>
+
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -141,6 +153,25 @@ function page() {
             </Button>
           </form>
         </Form>
+
+        {/* Divider */}
+        <div className="flex items-center my-4">
+          <div className="flex-grow h-px bg-gray-300" />
+          <span className="mx-3 text-gray-500 text-sm">OR</span>
+          <div className="flex-grow h-px bg-gray-300" />
+        </div>
+
+        {/* Google Sign In */}
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+        >
+          <FcGoogle className="w-5 h-5 mr-2" />
+          Sign Up with Google
+        </Button>
+
+        {/* Sign In Link */}
         <div className="text-center mt-4">
           <p>
             Already a member?{" "}
@@ -154,4 +185,4 @@ function page() {
   );
 }
 
-export default page
+export default Page
