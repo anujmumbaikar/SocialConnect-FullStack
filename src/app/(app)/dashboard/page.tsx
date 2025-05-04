@@ -1,100 +1,240 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, MessageSquare, Heart, Share2, Bookmark, MoreHorizontal, TrendingUp, Users, Zap } from "lucide-react";
 
 export default function DashboardPage() {
   const router = useRouter();
+  
   return (
-    <div className="w-[82vw] flex mx-auto px-4 py-6 gap-6">
-      <div className="w-full lg:w-[65%] space-y-6 mx-auto">
-        <section className="bg-white border rounded-xl p-4">
-          <h2 className="text-base font-semibold mb-3">Stories</h2>
-          <div className="flex gap-4 overflow-x-auto no-scrollbar">
-            {[...Array(15)].map((_, i) => {
-              const username = `user${i + 1}`;
-              return (
-                <div
-                  key={i}
-                  onClick={() => router.push(`/${username}/stories`)}
-                  className="flex flex-col items-center gap-1 cursor-pointer shrink-0"
-                >
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 to-pink-600 p-0.5">
-                    <div className="bg-white rounded-full p-0.5 h-full w-full">
-                      <div className="bg-gray-300 h-full w-full rounded-full" />
+    <div className="bg-slate-50 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Sidebar */}
+        <div className="hidden lg:block lg:col-span-3">
+          <Card className="sticky top-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-purple-500" />
+                <span>Explore</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-2 bg-slate-100 rounded-md cursor-pointer">
+                  <TrendingUp className="h-5 w-5 text-purple-500" />
+                  <span className="font-medium">Trending</span>
+                </div>
+                <div className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer">
+                  <Users className="h-5 w-5 text-gray-500" />
+                  <span>Communities</span>
+                </div>
+                <div className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer">
+                  <Bookmark className="h-5 w-5 text-gray-500" />
+                  <span>Saved</span>
+                </div>
+              </div>
+              
+              <div className="pt-3 border-t">
+                <h3 className="text-sm font-medium mb-3">Top Creators</h3>
+                <div className="space-y-3">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="bg-purple-100 text-purple-800">
+                            {`U${i+1}`}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">creator_{i+1}</span>
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-8 text-xs">
+                        Follow
+                      </Button>
                     </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Content */}
+        <div className="lg:col-span-6 space-y-6">
+          {/* Content Tabs */}
+          <Tabs defaultValue="featured" className="w-full">
+            <TabsList className="grid grid-cols-3 mb-6">
+              <TabsTrigger value="featured">Featured</TabsTrigger>
+              <TabsTrigger value="following">Following</TabsTrigger>
+              <TabsTrigger value="recent">Recent</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="featured" className="space-y-6">
+              {/* Featured Stories Bar */}
+              <section className="bg-white shadow-sm rounded-xl p-4">
+                <h2 className="text-base font-semibold mb-3 flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-amber-500" />
+                  <span>Highlighted Stories</span>
+                </h2>
+                <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+                  {[...Array(8)].map((_, i) => {
+                    const username = `creator${i + 1}`;
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => router.push(`/${username}/stories`)}
+                        className="flex flex-col items-center gap-1 cursor-pointer shrink-0"
+                      >
+                        <div className="w-16 h-16 rounded-lg bg-gradient-to-tr from-purple-400 to-indigo-600 p-0.5">
+                          <div className="bg-white rounded-lg p-0.5 h-full w-full">
+                            <div className="bg-slate-200 h-full w-full rounded-lg" />
+                          </div>
+                        </div>
+                        <span className="text-xs">{username}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* Content Cards */}
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="overflow-hidden border-none shadow-md">
+                  <CardHeader className="py-3 px-4 bg-white">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback className="bg-purple-100 text-purple-800">
+                            {`C${i+1}`}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium">creator_{i+1}</p>
+                          <p className="text-xs text-gray-500">2 hours ago</p>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  
+                  <div className="w-full aspect-video bg-slate-100 overflow-hidden">
+                    <img
+                      src={`/api/placeholder/800/500`}
+                      alt="Post content"
+                      className="object-cover w-full h-full"
+                    />
                   </div>
-                  <span className="text-xs">{username}</span>
+                  
+                  <CardContent className="pt-4">
+                    <h3 className="font-medium mb-2">Amazing discovery in the forest</h3>
+                    <p className="text-sm text-gray-600 line-clamp-2">
+                      This is an interesting caption that describes what this post is about.
+                      It provides context and engages viewers to interact with the content.
+                    </p>
+                  </CardContent>
+                  
+                  <CardFooter className="py-3 px-4 flex items-center justify-between bg-white">
+                    <div className="flex items-center gap-4">
+                      <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
+                        <Heart className="h-5 w-5" />
+                        <span>{243 + i * 57}</span>
+                      </Button>
+                      <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
+                        <MessageSquare className="h-5 w-5" />
+                        <span>{42 + i * 13}</span>
+                      </Button>
+                      <Button variant="ghost" size="sm" className="px-2">
+                        <Share2 className="h-5 w-5" />
+                      </Button>
+                    </div>
+                    <Button variant="ghost" size="sm" className="px-2">
+                      <Bookmark className="h-5 w-5" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </TabsContent>
+            
+            <TabsContent value="following" className="text-center py-12">
+              <p className="text-gray-500">Content from accounts you follow will appear here</p>
+              <Button className="mt-4 bg-purple-600 hover:bg-purple-700">Discover Accounts</Button>
+            </TabsContent>
+            
+            <TabsContent value="recent" className="text-center py-12">
+              <p className="text-gray-500">Recent content from the community</p>
+              <Button className="mt-4 bg-purple-600 hover:bg-purple-700">Browse All</Button>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Right Sidebar */}
+        <div className="hidden lg:block lg:col-span-3">
+          <div className="space-y-6 sticky top-6">
+            {/* Search */}
+            <Card>
+              <CardContent className="pt-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                  <input 
+                    type="text" 
+                    placeholder="Search..."
+                    className="w-full rounded-md border border-slate-200 pl-10 py-2 text-sm"
+                  />
                 </div>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="space-y-6 w-[60%] flex flex-col mx-auto">
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="bg-[#121212] rounded-xl border border-[#2a2a2a]"
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-600" />
-                  <span className="text-sm font-semibold text-white">
-                    user_{i + 1}
-                  </span>
-                </div>
-                <button className="text-white text-xl">•••</button>
+              </CardContent>
+            </Card>
+            
+            {/* Recommended */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base font-medium">Recommended for you</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback className="bg-slate-200">
+                          {`R${i+1}`}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">recommend_{i+1}</p>
+                        <p className="text-xs text-gray-500">Based on your interests</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" className="h-8 text-xs">
+                      Follow
+                    </Button>
+                  </div>
+                ))}
+              </CardContent>
+              <CardFooter className="pt-0">
+                <Button variant="ghost" size="sm" className="w-full text-purple-600">
+                  View All Recommendations
+                </Button>
+              </CardFooter>
+            </Card>
+            
+            {/* Footer Links */}
+            <div className="text-xs text-gray-500 px-2">
+              <div className="flex flex-wrap gap-x-2 gap-y-1 mb-3">
+                <span className="cursor-pointer hover:underline">About</span>
+                <span>•</span>
+                <span className="cursor-pointer hover:underline">Terms</span>
+                <span>•</span>
+                <span className="cursor-pointer hover:underline">Privacy</span>
+                <span>•</span>
+                <span className="cursor-pointer hover:underline">Help</span>
               </div>
-
-              {/* Post Image */}
-              <div className="w-full aspect-square bg-gray-800 overflow-hidden">
-                <img
-                  src={`https://source.unsplash.com/random/800x800?sig=${i}`} // Random image with square aspect ratio
-                  alt="post"
-                  className="object-cover w-full h-full"
-                />
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center gap-4 px-4 py-2 text-white text-xl">
-                <button>♡</button> {/* Like */}
-                <button>💬</button> {/* Comment */}
-                <button>📤</button> {/* Share */}
-              </div>
-
-              {/* Caption */}
-              <div className="px-4 pb-4">
-                <p className="text-sm text-white">
-                  <span className="font-semibold">user_{i + 1}</span> This is
-                  the caption for post {i + 1}.
-                </p>
-              </div>
+              <p>© 2025 Your Platform Name</p>
             </div>
-          ))}
-        </section>
-      </div>
-
-      {/* Suggested Accounts */}
-      <div className="hidden lg:block w-[280px] sticky top-4 h-fit">
-        <Card className="bg-white border rounded-xl overflow-hidden">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold">Suggested Accounts</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gray-300" />
-                  <span className="text-sm">user_{i + 6}</span>
-                </div>
-                <button className="text-blue-500 text-xs font-semibold hover:text-blue-700">
-                  Follow
-                </button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
