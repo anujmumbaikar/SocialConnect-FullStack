@@ -1,14 +1,21 @@
 'use client'
 import { useRouter, useParams } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function ProfilePage() {
   const router = useRouter()
   const params = useParams()
   const { data: session } = useSession()
-
+  const user = session?.user
   const username = params?.username as string
+  const [avatar, setAvatar] = useState<string>("");
+
+  useEffect(() => {
+    if (user) {
+      setAvatar(user.image || "");
+    }
+  }, [user]);
 
   const handleProfileClick = () => {
     router.push(`/${username}/stories`)
@@ -18,8 +25,8 @@ export default function ProfilePage() {
     signOut()
   }
 
-  // const isOwnProfile = session?.user?.username === username
-  const isOwnProfile = true // For demo purposes, assume it's own profile
+  const userSessionUsername = user?.username || user?.email?.split("@")[0];
+  const isOwnProfile = userSessionUsername === username;
 
   return (
     <div className="w-[82vw] flex mx-auto px-4 py-6">
@@ -29,8 +36,12 @@ export default function ProfilePage() {
             className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-tr from-yellow-400 to-pink-600 p-0.5 flex-shrink-0 cursor-pointer"
             onClick={handleProfileClick}
           >
-            <div className="bg-white rounded-full p-0.5 h-full w-full">
-              <div className="bg-gray-300 h-full w-full rounded-full" />
+            <div className="bg-white rounded-full p-0.5 h-full w-full flex items-center justify-center">
+              <img
+                src={avatar || "/default-avatar.png"}
+                alt={username}
+                className="w-full h-full rounded-full object-cover"
+              />
             </div>
           </div>
           

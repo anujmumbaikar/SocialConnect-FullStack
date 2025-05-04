@@ -64,14 +64,10 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user,account,profile }) {
+    async jwt({ token, user, account, profile }) {
       await dbConnect();
       if (account?.provider === "google" && token?.email) {
         let existingUser = await User.findOne({ email: token.email });
-
-        console.log("Google profile object:", profile);
-        console.log("Google account object:",(profile as { picture?: string }).picture);
-        
         if (!existingUser) {
           const newUser = await User.create({
             email: token.email,
@@ -81,6 +77,7 @@ export const authOptions: NextAuthOptions = {
             username: token.email.split("@")[0],
           });
           token.id = newUser._id.toString();
+          
         } else {
           token.id = existingUser._id.toString();
         }

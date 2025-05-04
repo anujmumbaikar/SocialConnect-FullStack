@@ -5,10 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, MessageSquare, Heart, Share2, Bookmark, MoreHorizontal, TrendingUp, Users, Zap } from "lucide-react";
-
 export default function DashboardPage() {
   const router = useRouter();
-  
   return (
     <div className="bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-6">

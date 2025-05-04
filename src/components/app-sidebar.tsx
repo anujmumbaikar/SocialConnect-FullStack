@@ -11,25 +11,32 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { 
-  Home, 
-  Search, 
-  Compass, 
-  Film, 
-  MessageSquare, 
-  User,
-  TrendingUp,
-  Bookmark,
-  Bell,
-  Settings,
+  Home, Search, Compass, Film, MessageSquare, User,
+  TrendingUp, Bookmark, Bell, Settings,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }) {
   const router = useRouter();
-  const [username, setUsername] = React.useState<string | null>("anujmumbaikar12");
+  const { data: session} = useSession();
   const [expanded, setExpanded] = React.useState(true);
   
+  const sessionUser = session?.user;
+  const [username, setUsername] = React.useState("User");
+  const [avatar, setAvatar] = React.useState("");
+
+  React.useEffect(() => {
+    if (sessionUser) {
+      setUsername(
+        sessionUser.username ||
+        sessionUser.email?.split("@")[0] ||"User"
+      );
+      setAvatar(session.user.avatar || session.user.image || "");
+    }
+  }, [session]);
+
   const menuItems = [
     { label: "Home", icon: Home, path: "/dashboard" },
     { label: "Search", icon: Search, path: "/search" },
@@ -40,10 +47,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     { label: "Saved", icon: Bookmark, path: "/saved" },
     { label: "Notifications", icon: Bell, path: "/notifications" },
   ];
-
   return (
-    <div>
-      <Sidebar 
+    <Sidebar 
       className={`bg-white border-r border-slate-100 shadow-sm transition-all duration-300 ${expanded ? 'w-64' : 'w-20'}`}
       {...props}
     >
@@ -113,9 +118,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           `}
         >
           <Avatar className="h-9 w-9 ring-2 ring-purple-100">
-            <AvatarFallback className="bg-purple-100 text-purple-800 font-medium">
-              {username?.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
+            {avatar ? (
+              <AvatarImage src={avatar} alt={username} />
+            ) : (
+              <AvatarFallback className="bg-purple-100 text-purple-800 font-medium">
+                {username?.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
+            )}
           </Avatar>
           {expanded && (
             <div className="text-left">
@@ -142,6 +151,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarRail className="bg-slate-50" />
     </Sidebar>
-    </div>
   );
 }
