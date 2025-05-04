@@ -25,7 +25,9 @@ const userSchema = new Schema<IUser>({
    },
     username:{
      type:String,
-     required:[true,"Username is required"],
+     required:[function(){
+        return this.provider === "credential";
+     },"Username is required"],
      unique:true,
      trim:true,
      minLength:3,
@@ -53,11 +55,15 @@ const userSchema = new Schema<IUser>({
     },
     verificationCode:{
      type:String,
-     required:[true,"Verification code is required"],
+     required:[function(){
+        return this.provider === "credential";
+     },"Verification code is required"],
     },
     verificationCodeExpires:{
      type:Date,
-     required:[true,"Verification code expires is required"],
+     required:[function(){
+        return this.provider === "credential";
+     },"Verification code expires is required"],
     },
     isVerified:{
      type:Boolean,
