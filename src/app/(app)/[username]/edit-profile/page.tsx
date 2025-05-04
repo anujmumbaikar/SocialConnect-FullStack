@@ -26,6 +26,10 @@ import { useRouter } from "next/navigation";
 import { editProfileSchema } from "@/schemas/editProfileSchema";
 import axios from 'axios';
 
+/*
+
+----------___TODO______ taking form data from next-auth session.--------------------------------
+*/
 export default function EditProfile() {
   const [username, setUsername] = useState<string>("");
   const [usernameMessage, setUsernameMessage] = useState<string>("");
