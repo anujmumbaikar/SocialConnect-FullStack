@@ -75,23 +75,20 @@ export default function StoriesPage() {
     },
   ];
 
-  // Get current user and story
   const currentUser = users[activeUserIndex] || null;
   const currentStories = currentUser?.stories || [];
   const currentStory = currentStories[activeStoryIndex] || null;
 
-  // Progress timer for stories
   useEffect(() => {
     if (paused || !currentStory) return;
 
     const timer = setTimeout(() => {
       goToNextStory();
-    }, 5000); // 5 seconds per story
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [activeUserIndex, activeStoryIndex, paused]);
 
-  // Navigate to next story or user
   const goToNextStory = () => {
     if (activeStoryIndex < currentStories.length - 1) {
       // Go to next story of current user
@@ -103,7 +100,6 @@ export default function StoriesPage() {
     }
   };
 
-  // Navigate to previous story or user
   const goToPrevStory = () => {
     if (activeStoryIndex > 0) {
       // Go to previous story of current user

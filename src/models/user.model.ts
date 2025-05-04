@@ -36,8 +36,6 @@ const userSchema = new Schema<IUser>({
      required:function(){
         return this.provider === "credential";
      },
-     minLength:6,
-     maxLength:20
     },
     fullname:{
      type:String,

@@ -11,7 +11,6 @@ import { signUpSchema } from '@/schemas/signUpSchema'
 import axios from 'axios'
 import { Loader2 } from 'lucide-react'
 import { signIn } from 'next-auth/react'
-
 import {
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form'

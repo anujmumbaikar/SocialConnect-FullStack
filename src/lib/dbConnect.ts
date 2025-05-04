@@ -17,7 +17,7 @@ export async function dbConnect() {
     }
     if(!cached.promise){
         const opts = {
-            bufferCommmands: true,
+            bufferCommands: true,
             maxPoolSize: 10,
         }
         cached.promise = mongoose.connect(`${MONGODB_URI}/social-media`,opts).then((mongoose) => mongoose.connection)

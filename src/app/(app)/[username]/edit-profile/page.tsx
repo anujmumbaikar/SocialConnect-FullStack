@@ -44,7 +44,7 @@ export default function EditProfile() {
     defaultValues: {
       username: "",
       fullname: "",
-      avatar: "",
+      avatar: "https://www.svgrepo.com/show/452030/avatar-default.svg",
       bio: "",
       gender: "",
     }
