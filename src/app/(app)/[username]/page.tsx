@@ -13,7 +13,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-      setAvatar(user.image || "");
+      setAvatar(user.avatar || user.image || "");
     }
   }, [user]);
 

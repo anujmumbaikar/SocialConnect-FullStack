@@ -25,9 +25,9 @@ import { useDebounceCallback } from "usehooks-ts";
 import { useRouter } from "next/navigation";
 import { editProfileSchema } from "@/schemas/editProfileSchema";
 import axios from 'axios';
+import { useSession } from "next-auth/react";
 
 /*
-
 ----------___TODO______ taking form data from next-auth session.--------------------------------
 */
 export default function EditProfile() {
@@ -39,10 +39,13 @@ export default function EditProfile() {
   const router = useRouter();
   const debouncedUsername = useDebounceCallback((value: string) => setUsername(value), 500);
 
+
+  const { data: session } = useSession();
+  const user = session?.user;
   const form = useForm<z.infer<typeof editProfileSchema>>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      username: "",
+      username:"",
       fullname: "",
       avatar: "https://www.svgrepo.com/show/452030/avatar-default.svg",
       bio: "",
@@ -51,25 +54,18 @@ export default function EditProfile() {
   });
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get("/api/get-user-data");
-        const userData = response.data;
-        form.reset({
-          username: userData.username,
-          fullname: userData.fullName,
-          avatar: userData.avatar,
-          bio: userData.bio,
-          gender: userData.gender
-        });
-        setUsername(userData.username);
-      } catch (error) {
-        toast.error("Error fetching user data");
-      }
-    };
-    fetchUser();
-  }, [form]);
-
+    if (user) {
+      form.reset({
+        username: user.username || user.email?.split('@')[0] || "",
+        fullname: user.fullname || "",
+        avatar: user.avatar || user.image || "https://www.svgrepo.com/show/452030/avatar-default.svg",
+        bio: user.bio || "",
+        gender: user.gender || "",
+      });
+      setUsername(user.username || user.email?.split('@')[0] || "");
+    }
+  }, [user, form]);
+  
   useEffect(() => {
     const checkUsernameUniqueness = async () => {
       if (username) {
