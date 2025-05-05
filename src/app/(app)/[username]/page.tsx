@@ -128,7 +128,7 @@ export default function ProfilePage() {
                     <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">
                       Follow
                     </button>
-                    <button className="bg-gray-100 hover:bg-gray-200 text-black px-4 py-1.5 rounded-md text-sm font-medium transition">
+                    <button className="bg-gray-100 hover:bg-gray-200 text-black px-4 py-1.5 rounded-md text-sm font-medium transition" onClick={() => router.push(`/messages`)}>
                       Message
                     </button>
                     <button className="bg-gray-100 hover:bg-gray-200 text-black px-3 py-1.5 rounded-md text-sm font-medium transition">

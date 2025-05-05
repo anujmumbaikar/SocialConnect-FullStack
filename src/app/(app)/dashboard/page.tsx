@@ -1,12 +1,60 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, MessageSquare, Heart, Share2, Bookmark, MoreHorizontal, TrendingUp, Users, Zap } from "lucide-react";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  Search,
+  MessageSquare,
+  Heart,
+  Share2,
+  Bookmark,
+  MoreHorizontal,
+  TrendingUp,
+  Users,
+  Zap,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+
 export default function DashboardPage() {
   const router = useRouter();
+  const [users, setUsers] = useState<{ username: string; avatar:string }[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("/api/get-users");
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+        const data = await response.json();
+        setUsers(data.users || []);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
+
   return (
     <div className="bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -34,25 +82,24 @@ export default function DashboardPage() {
                   <span>Saved</span>
                 </div>
               </div>
-              
+
               <div className="pt-3 border-t">
                 <h3 className="text-sm font-medium mb-3">Top Creators</h3>
                 <div className="space-y-3">
-                  {[...Array(4)].map((_, i) => (
-                    <div key={i} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Avatar className="h-8 w-8">
-                          <AvatarFallback className="bg-purple-100 text-purple-800">
-                            {`U${i+1}`}
-                          </AvatarFallback>
+                  {
+                    users.slice(0, 5).map((user, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer"
+                        onClick={() => router.push(`/${user.username}`)}
+                      >
+                        <Avatar>
+                          <AvatarImage src={user.avatar} alt={user.username}/>
                         </Avatar>
-                        <span className="text-sm">creator_{i+1}</span>
+                        <span className="text-sm">{user.username}</span>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-8 text-xs">
-                        Follow
-                      </Button>
-                    </div>
-                  ))}
+                    ))
+                  }
                 </div>
               </div>
             </CardContent>
@@ -61,16 +108,14 @@ export default function DashboardPage() {
 
         {/* Main Content */}
         <div className="lg:col-span-6 space-y-6">
-          {/* Content Tabs */}
           <Tabs defaultValue="featured" className="w-full">
             <TabsList className="grid grid-cols-3 mb-6">
               <TabsTrigger value="featured">Featured</TabsTrigger>
               <TabsTrigger value="following">Following</TabsTrigger>
               <TabsTrigger value="recent">Recent</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="featured" className="space-y-6">
-              {/* Featured Stories Bar */}
               <section className="bg-white shadow-sm rounded-xl p-4">
                 <h2 className="text-base font-semibold mb-3 flex items-center gap-2">
                   <Zap className="h-4 w-4 text-amber-500" />
@@ -97,7 +142,6 @@ export default function DashboardPage() {
                 </div>
               </section>
 
-              {/* Content Cards */}
               {[...Array(3)].map((_, i) => (
                 <Card key={i} className="overflow-hidden border-none shadow-md">
                   <CardHeader className="py-3 px-4 bg-white">
@@ -105,11 +149,11 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-3">
                         <Avatar>
                           <AvatarFallback className="bg-purple-100 text-purple-800">
-                            {`C${i+1}`}
+                            {`C${i + 1}`}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="text-sm font-medium">creator_{i+1}</p>
+                          <p className="text-sm font-medium">creator_{i + 1}</p>
                           <p className="text-xs text-gray-500">2 hours ago</p>
                         </div>
                       </div>
@@ -118,7 +162,7 @@ export default function DashboardPage() {
                       </Button>
                     </div>
                   </CardHeader>
-                  
+
                   <div className="w-full aspect-video bg-slate-100 overflow-hidden">
                     <img
                       src={`/api/placeholder/800/500`}
@@ -126,7 +170,7 @@ export default function DashboardPage() {
                       className="object-cover w-full h-full"
                     />
                   </div>
-                  
+
                   <CardContent className="pt-4">
                     <h3 className="font-medium mb-2">Amazing discovery in the forest</h3>
                     <p className="text-sm text-gray-600 line-clamp-2">
@@ -134,7 +178,7 @@ export default function DashboardPage() {
                       It provides context and engages viewers to interact with the content.
                     </p>
                   </CardContent>
-                  
+
                   <CardFooter className="py-3 px-4 flex items-center justify-between bg-white">
                     <div className="flex items-center gap-4">
                       <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
@@ -156,15 +200,21 @@ export default function DashboardPage() {
                 </Card>
               ))}
             </TabsContent>
-            
+
             <TabsContent value="following" className="text-center py-12">
-              <p className="text-gray-500">Content from accounts you follow will appear here</p>
-              <Button className="mt-4 bg-purple-600 hover:bg-purple-700">Discover Accounts</Button>
+              <p className="text-gray-500">
+                Content from accounts you follow will appear here
+              </p>
+              <Button className="mt-4 bg-purple-600 hover:bg-purple-700">
+                Discover Accounts
+              </Button>
             </TabsContent>
-            
+
             <TabsContent value="recent" className="text-center py-12">
               <p className="text-gray-500">Recent content from the community</p>
-              <Button className="mt-4 bg-purple-600 hover:bg-purple-700">Browse All</Button>
+              <Button className="mt-4 bg-purple-600 hover:bg-purple-700">
+                Browse All
+              </Button>
             </TabsContent>
           </Tabs>
         </div>
@@ -177,39 +227,49 @@ export default function DashboardPage() {
               <CardContent className="pt-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     placeholder="Search..."
                     className="w-full rounded-md border border-slate-200 pl-10 py-2 text-sm"
                   />
                 </div>
               </CardContent>
             </Card>
-            
+
             {/* Recommended */}
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base font-medium">Recommended for you</CardTitle>
+                <CardTitle className="text-base font-medium">
+                  Recommended for you
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-slate-200">
-                          {`R${i+1}`}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium">recommend_{i+1}</p>
-                        <p className="text-xs text-gray-500">Based on your interests</p>
+                {!loading && users.length > 0 ? (
+                  users.map((user, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between"
+                      onClick={() => router.push(`/${user.username}`)}
+                    >
+                      <div className="flex items-center gap-2" >
+                        <Avatar>
+                          <AvatarImage
+                            src={user.avatar}
+                            alt={user.username}
+                          />
+                        </Avatar>
+                        <span className="text-sm">{user.username}</span>
                       </div>
+                      <Button variant="ghost" size="sm" className="h-8 text-xs">
+                        Follow
+                      </Button>
                     </div>
-                    <Button variant="outline" size="sm" className="h-8 text-xs">
-                      Follow
-                    </Button>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    {loading ? "Loading..." : "No users found."}
+                  </p>
+                )}
               </CardContent>
               <CardFooter className="pt-0">
                 <Button variant="ghost" size="sm" className="w-full text-purple-600">
@@ -217,8 +277,8 @@ export default function DashboardPage() {
                 </Button>
               </CardFooter>
             </Card>
-            
-            {/* Footer Links */}
+
+            {/* Footer */}
             <div className="text-xs text-gray-500 px-2">
               <div className="flex flex-wrap gap-x-2 gap-y-1 mb-3">
                 <span className="cursor-pointer hover:underline">About</span>
