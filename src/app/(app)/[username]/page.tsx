@@ -32,7 +32,6 @@ export default function ProfilePage() {
         setLoading(true)
         const res = await axios.get(`/api/get-user-data?username=${encodeURIComponent(username)}`)
         setProfileData(res.data.user)
-        console.log("res", res.data.user);
             
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to load profile')
@@ -40,7 +39,6 @@ export default function ProfilePage() {
         setLoading(false)
       }
     }
-
     fetchUserData()
   }, [username, status])
 

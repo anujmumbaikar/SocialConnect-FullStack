@@ -8,17 +8,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Search,
   MessageSquare,
@@ -34,8 +25,11 @@ import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [users, setUsers] = useState<{ username: string; avatar:string }[]>([]);
+  const [users, setUsers] = useState<{ username: string; avatar: string }[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
+  const [searchByUsername, setSearchByUsername] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -54,6 +48,12 @@ export default function DashboardPage() {
     };
     fetchUsers();
   }, []);
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchByUsername) {
+      router.push(`/${searchByUsername}`);
+    }
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -86,20 +86,18 @@ export default function DashboardPage() {
               <div className="pt-3 border-t">
                 <h3 className="text-sm font-medium mb-3">Top Creators</h3>
                 <div className="space-y-3">
-                  {
-                    users.slice(0, 5).map((user, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer"
-                        onClick={() => router.push(`/${user.username}`)}
-                      >
-                        <Avatar>
-                          <AvatarImage src={user.avatar} alt={user.username}/>
-                        </Avatar>
-                        <span className="text-sm">{user.username}</span>
-                      </div>
-                    ))
-                  }
+                  {users.slice(0, 5).map((user, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer"
+                      onClick={() => router.push(`/${user.username}`)}
+                    >
+                      <Avatar>
+                        <AvatarImage src={user.avatar} alt={user.username} />
+                      </Avatar>
+                      <span className="text-sm">{user.username}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </CardContent>
@@ -172,20 +170,31 @@ export default function DashboardPage() {
                   </div>
 
                   <CardContent className="pt-4">
-                    <h3 className="font-medium mb-2">Amazing discovery in the forest</h3>
+                    <h3 className="font-medium mb-2">
+                      Amazing discovery in the forest
+                    </h3>
                     <p className="text-sm text-gray-600 line-clamp-2">
-                      This is an interesting caption that describes what this post is about.
-                      It provides context and engages viewers to interact with the content.
+                      This is an interesting caption that describes what this
+                      post is about. It provides context and engages viewers to
+                      interact with the content.
                     </p>
                   </CardContent>
 
                   <CardFooter className="py-3 px-4 flex items-center justify-between bg-white">
                     <div className="flex items-center gap-4">
-                      <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center gap-1 px-2"
+                      >
                         <Heart className="h-5 w-5" />
                         <span>{243 + i * 57}</span>
                       </Button>
-                      <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center gap-1 px-2"
+                      >
                         <MessageSquare className="h-5 w-5" />
                         <span>{42 + i * 13}</span>
                       </Button>
@@ -223,18 +232,28 @@ export default function DashboardPage() {
         <div className="hidden lg:block lg:col-span-3">
           <div className="space-y-6 sticky top-6">
             {/* Search */}
-            <Card>
-              <CardContent className="pt-4">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full rounded-md border border-slate-200 pl-10 py-2 text-sm"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            <form onSubmit={handleSearch}>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="relative flex items-center">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="Search by username"
+                      className="w-full rounded-md border border-slate-200 pl-10 py-2 text-sm"
+                      value={searchByUsername}
+                      onChange={(e) => setSearchByUsername(e.target.value)}
+                    />
+                    <Button
+                      type="submit"
+                      className="ml-2 bg-purple-600 text-white"
+                    >
+                      Search
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </form>
 
             {/* Recommended */}
             <Card>
@@ -251,12 +270,9 @@ export default function DashboardPage() {
                       className="flex items-center justify-between"
                       onClick={() => router.push(`/${user.username}`)}
                     >
-                      <div className="flex items-center gap-2" >
+                      <div className="flex items-center gap-2">
                         <Avatar>
-                          <AvatarImage
-                            src={user.avatar}
-                            alt={user.username}
-                          />
+                          <AvatarImage src={user.avatar} alt={user.username} />
                         </Avatar>
                         <span className="text-sm">{user.username}</span>
                       </div>
@@ -272,7 +288,11 @@ export default function DashboardPage() {
                 )}
               </CardContent>
               <CardFooter className="pt-0">
-                <Button variant="ghost" size="sm" className="w-full text-purple-600">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-purple-600"
+                >
                   View All Recommendations
                 </Button>
               </CardFooter>

@@ -10,148 +10,227 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { 
-  Home, Search, Compass, Film, MessageSquare, User,
-  TrendingUp, Bookmark, Bell, Settings,
+import {
+  Home,
+  Compass,
+  Film,
+  MessageSquare,
+  User,
+  TrendingUp,
+  Bookmark,
+  Bell,
+  Settings,
+  Plus,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 export function AppSidebar({ ...props }) {
   const router = useRouter();
-  const { data: session} = useSession();
+  const { data: session } = useSession();
   const [expanded, setExpanded] = React.useState(true);
-  
+
   const sessionUser = session?.user;
   const [username, setUsername] = React.useState("User");
   const [avatar, setAvatar] = React.useState("");
 
   React.useEffect(() => {
     if (sessionUser) {
-      
-      
       setUsername(
-        sessionUser.username || sessionUser.email?.split("@")[0] as string
+        sessionUser.username || (sessionUser.email?.split("@")[0] as string)
       );
       setAvatar(session.user.avatar || session.user.image || "");
     }
   }, [session]);
+
   const menuItems = [
     { label: "Home", icon: Home, path: "/dashboard" },
-    { label: "Search", icon: Search, path: "/search" },
     { label: "Explore", icon: Compass, path: "/explore" },
     { label: "Reels", icon: Film, path: "/reels" },
     { label: "Messages", icon: MessageSquare, path: "/messages" },
     { label: "Trending", icon: TrendingUp, path: "/trending" },
     { label: "Saved", icon: Bookmark, path: "/saved" },
     { label: "Notifications", icon: Bell, path: "/notifications" },
+    {
+      label: "Create",
+      icon: Plus,
+      component: (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              className={`
+                flex items-center gap-3 py-3 px-4 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-purple-600
+                ${expanded ? "justify-start" : "justify-center"} transition-all duration-200
+              `}
+            >
+              <Plus className={`${expanded ? "h-5 w-5" : "h-6 w-6"}`} />
+              {expanded && (
+                <span className="font-medium text-base transition-opacity duration-200">
+                  Create
+                </span>
+              )}
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" align="start" className="w-48">
+            <DropdownMenuItem onClick={() => router.push("/create/story")}>
+              📖 Add Story
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/create/post")}>
+              📝 Add Post
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/create/reel")}>
+              🎥 Add Reel
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
   ];
+
   return (
-    <Sidebar 
-      className={`bg-white border-r border-slate-100 shadow-sm transition-all duration-300 ${expanded ? 'w-64' : 'w-20'}`}
-      {...props}
-    >
-      <SidebarHeader className={`font-bold py-6 px-4 flex items-center justify-${expanded ? 'start' : 'center'} gap-2`}>
-        {expanded ? (
-          <>
+    <div>
+      <Sidebar
+        className={`bg-white border-r border-slate-100 shadow-sm transition-all duration-300 ${expanded ? "w-64" : "w-20"}`}
+        {...props}
+      >
+        <SidebarHeader
+          className={`font-bold py-6 px-4 flex items-center justify-${expanded ? "start" : "center"} gap-2`}
+        >
+          {expanded ? (
+            <>
+              <div className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg w-10 h-10 flex items-center justify-center">
+                <span className="font-extrabold">S</span>
+              </div>
+              <span className="text-xl bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                SOCIALXMEDIA
+              </span>
+            </>
+          ) : (
             <div className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg w-10 h-10 flex items-center justify-center">
               <span className="font-extrabold">S</span>
             </div>
-            <span className="text-xl bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              SOCIALXMEDIA
-            </span>
-          </>
-        ) : (
-          <div className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg w-10 h-10 flex items-center justify-center">
-            <span className="font-extrabold">S</span>
-          </div>
-        )}
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="ml-auto rounded-full h-8 w-8 p-0"
-          onClick={() => setExpanded(!expanded)}
-        >
-          {expanded ? (
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8.5 4L5.5 7.5L8.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          ) : (
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.5 11L9.5 7.5L6.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
           )}
-        </Button>
-      </SidebarHeader>
-      
-      <SidebarContent className="px-2">
-        <SidebarMenu className="flex flex-col gap-1 w-full">
-          {menuItems.map((item, index) => (
-            <SidebarMenuItem key={index}>
-              <SidebarMenuButton 
-                onClick={() => router.push(item.path)}
-                className={`
-                  flex items-center gap-3 py-3 px-4 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-purple-600
-                  ${expanded ? 'justify-start' : 'justify-center'} transition-all duration-200
-                `}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="ml-auto rounded-full h-8 w-8 p-0"
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? (
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <item.icon className={`${expanded ? 'h-5 w-5' : 'h-6 w-6'}`} />
-                {expanded && (
-                  <span className={`font-medium text-base transition-opacity duration-200`}>
-                    {item.label}
-                  </span>
-                )}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarContent>
-      
-      <div className="mt-auto mb-4 px-3">
-        <Button
-          variant="ghost"
-          onClick={() => router.push(`/${username}`)}
-          className={`
-            w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
-            ${expanded ? 'justify-start' : 'justify-center'}
-          `}
-        >
-          <Avatar className="h-9 w-9 ring-2 ring-purple-100">
-            {avatar ? (
-              <AvatarImage src={avatar} alt={username} />
+                <path
+                  d="M8.5 4L5.5 7.5L8.5 11"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             ) : (
-              <AvatarFallback className="bg-purple-100 text-purple-800 font-medium">
-                {username?.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.5 11L9.5 7.5L6.5 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             )}
-          </Avatar>
-          {expanded && (
-            <div className="text-left">
-              <p className="text-sm font-medium">{username}</p>
-              <p className="text-xs text-slate-500">View Profile</p>
-            </div>
-          )}
-        </Button>
-      </div>
-      
-      <div className="px-3 pb-4">
-        <Button
-          variant="ghost"
-          onClick={() => router.push('/settings')}
-          className={`
-            w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
-            ${expanded ? 'justify-start' : 'justify-center'}
-          `}
-        >
-          <Settings className="h-5 w-5 text-slate-600" />
-          {expanded && <span className="font-medium text-sm">Settings</span>}
-        </Button>
-      </div>
+          </Button>
+        </SidebarHeader>
 
-      <SidebarRail className="bg-slate-50" />
-    </Sidebar>
+        <SidebarContent className="px-2">
+          <SidebarMenu className="flex flex-col gap-1 w-full">
+            {menuItems.map((item, index) => (
+              <SidebarMenuItem key={index}>
+                {item.component ? (
+                  item.component
+                ) : (
+                  <SidebarMenuButton
+                    onClick={() => router.push(item.path)}
+                    className={`
+                      flex items-center gap-3 py-3 px-4 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-purple-600
+                      ${expanded ? "justify-start" : "justify-center"} transition-all duration-200
+                    `}
+                  >
+                    <item.icon
+                      className={`${expanded ? "h-5 w-5" : "h-6 w-6"}`}
+                    />
+                    {expanded && (
+                      <span className="font-medium text-base transition-opacity duration-200">
+                        {item.label}
+                      </span>
+                    )}
+                  </SidebarMenuButton>
+                )}
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarContent>
+
+        <div className="mt-auto mb-4 px-3">
+          <Button
+            variant="ghost"
+            onClick={() => router.push(`/${username}`)}
+            className={`
+            w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
+            ${expanded ? "justify-start" : "justify-center"}
+          `}
+          >
+            <Avatar className="h-9 w-9 ring-2 ring-purple-100">
+              {avatar ? (
+                <AvatarImage src={avatar} alt={username} />
+              ) : (
+                <AvatarFallback className="bg-purple-100 text-purple-800 font-medium">
+                  {username?.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              )}
+            </Avatar>
+            {expanded && (
+              <div className="text-left">
+                <p className="text-sm font-medium">{username}</p>
+                <p className="text-xs text-slate-500">View Profile</p>
+              </div>
+            )}
+          </Button>
+        </div>
+
+        <div className="px-3 pb-4">
+          <Button
+            variant="ghost"
+            onClick={() => router.push("/settings")}
+            className={`
+            w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
+            ${expanded ? "justify-start" : "justify-center"}
+          `}
+          >
+            <Settings className="h-5 w-5 text-slate-600" />
+            {expanded && <span className="font-medium text-sm">Settings</span>}
+          </Button>
+        </div>
+
+        <SidebarRail className="bg-slate-50" />
+      </Sidebar>
+    </div>
   );
 }
