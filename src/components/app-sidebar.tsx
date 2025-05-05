@@ -17,6 +17,8 @@ import {
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { toast } from "sonner";
 
 export function AppSidebar({ ...props }) {
   const router = useRouter();
@@ -30,13 +32,11 @@ export function AppSidebar({ ...props }) {
   React.useEffect(() => {
     if (sessionUser) {
       setUsername(
-        sessionUser.username ||
-        sessionUser.email?.split("@")[0] ||"User"
+        sessionUser.username || sessionUser.email?.split("@")[0] as string
       );
       setAvatar(session.user.avatar || session.user.image || "");
     }
   }, [session]);
-
   const menuItems = [
     { label: "Home", icon: Home, path: "/dashboard" },
     { label: "Search", icon: Search, path: "/search" },

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { useDebounceCallback } from 'usehooks-ts'
 import Link from 'next/link'
 import { signUpSchema } from '@/schemas/signUpSchema'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Loader2 } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import {
@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FcGoogle } from 'react-icons/fc'
+import ApiResponse from '@/types/ApiResponse'
 
 function Page() {
   const [username, setUsername] = React.useState<string>("")
@@ -45,7 +46,8 @@ function Page() {
           const response = await axios.get(`/api/check-username-unique?username=${username}`);
           setUsernameMessage(response.data.message);
         } catch (error) {
-          toast.error("Error checking username uniqueness")
+          const AxiosError = error as AxiosError<ApiResponse>
+          setUsernameMessage(AxiosError.response?.data.message ?? "error in checking username")
         } finally {
           setIsCheckingUsername(false)
         }

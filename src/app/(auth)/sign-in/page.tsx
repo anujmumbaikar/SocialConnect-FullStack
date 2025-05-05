@@ -39,8 +39,12 @@ function page() {
       identifier: data.identifier,
       password: data.password,
     });
+    
     if (result?.error) {
-      toast.error(result.error);
+      console.log(result.error);
+      console.log(result);
+      
+      toast.error("Invalid credentials");
     }
     if (result?.url) {
       //now in nextauth redirection is little bit differernt. // so inste of that i will be using router

@@ -32,10 +32,7 @@ function VerifyAccount() {
             toast.success(response.data.message)
             router.replace('/sign-in')
         } catch (error) {
-            console.log("error in sign up",error);
-            const AxiosError = error as AxiosError<ApiResponse>
-            let message = AxiosError.response?.data.message ?? "error in sign up"
-            toast.error(message)
+            toast.error("username must be more than 4 characters")
         }
       }
   return (

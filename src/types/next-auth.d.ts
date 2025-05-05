@@ -13,13 +13,13 @@ declare module 'next-auth'{
     interface Session{
         user:{
             _id?: string;
-            username?: string;
-            email?: string;
+            username?: string | null;
+            email?: string | null;
             fullname?: string;
-            avatar?: string;
+            avatar?: string | null;
             bio?: string;
             gender?: string;
-        } & DefaultSession["user"]
+        } & DefaultSession["user"] 
     }
 }
 declare module 'next-auth/jwt'{

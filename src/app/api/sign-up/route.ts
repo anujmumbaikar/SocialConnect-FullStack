@@ -50,7 +50,7 @@ export async function POST(req:Request){
             })
             await newUser.save();
         }
-        const sendEmail = await sendVerificationEmail(email,password,username)
+        const sendEmail = await sendVerificationEmail(email,verificationCode,username)
         if(!sendEmail.success){
             return NextResponse.json({
                 message:sendEmail.message,
