@@ -1,11 +1,8 @@
 'use client'
-
 import { useRouter, useParams } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Image from 'next/image'
-import Link from 'next/link'
 
 interface Post {
   imageUrl: string
@@ -16,15 +13,16 @@ export default function ProfilePage() {
   const router = useRouter()
   const { username } = useParams() as { username: string }
   const { data: session, status } = useSession()
-  const user = session?.user
-
+  
   const [profileData, setProfileData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState('posts')
 
-  const isOwnProfile =
-    user && (user.username === username || user.email?.split('@')[0] === username)
+  // Check if the logged-in user is viewing their own profile
+  const isOwnProfile = session?.user && 
+    (profileData?.email === session.user.email ||
+     profileData?.username === session.user.username)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -32,12 +30,10 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
       try {
         setLoading(true)
-        if (isOwnProfile && user) {
-          setProfileData(user)
-        } else {
-          const res = await axios.get(`/api/get-user-data?username=${encodeURIComponent(username)}`)
-          setProfileData(res.data.user)
-        }
+        const res = await axios.get(`/api/get-user-data?username=${encodeURIComponent(username)}`)
+        setProfileData(res.data.user)
+        console.log(res.data.user);
+        
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to load profile')
       } finally {
@@ -46,7 +42,7 @@ export default function ProfilePage() {
     }
 
     fetchUserData()
-  }, [username, user, status, isOwnProfile])
+  }, [username, status])
 
   const handleLogout = () => signOut()
   const handleProfileClick = () => router.push(`/${username}/stories`)
@@ -158,7 +154,7 @@ export default function ProfilePage() {
 
             {/* Bio */}
             <div className="text-center md:text-left">
-              <h3 className="font-semibold">{profileData.name || profileData.username}</h3>
+              <h3 className="font-semibold">{profileData.fullname || profileData.username}</h3>
               <p className="text-sm whitespace-pre-wrap">{profileData.bio || 'No bio available'}</p>
               {profileData.website && (
                 <a href={profileData.website.startsWith('http') ? profileData.website : `https://${profileData.website}`} 

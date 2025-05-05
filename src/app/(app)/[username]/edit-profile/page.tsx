@@ -27,9 +27,6 @@ import { editProfileSchema } from "@/schemas/editProfileSchema";
 import axios from 'axios';
 import { useSession } from "next-auth/react";
 
-/*
-----------___TODO______ taking form data from next-auth session.--------------------------------
-*/
 export default function EditProfile() {
   const [username, setUsername] = useState<string>("");
   const [usernameMessage, setUsernameMessage] = useState<string>("");
@@ -92,7 +89,7 @@ export default function EditProfile() {
   const onSubmit = async (data: z.infer<typeof editProfileSchema>) => {
     setIsSubmitting(true);
     try {    
-      const response = await axios.post('/api/edit-profile', data);
+      const response = await axios.put('/api/edit-profile', data);
       toast.success(response.data.message);
       router.push(`/${data.username}`);
     } catch (error) {

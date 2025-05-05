@@ -14,6 +14,7 @@ export interface IUser{
     createdAt?:Date;
     updatedAt?:Date;
     gender?:string;
+    bio?:string;
 }
 const userSchema = new Schema<IUser>({
    email:{
@@ -71,6 +72,10 @@ const userSchema = new Schema<IUser>({
     },
     gender:{
         type:String,
+    },
+    bio:{
+        type:String,
+        default:"",
     }
 },{
     timestamps:true
