@@ -31,6 +31,8 @@ export function AppSidebar({ ...props }) {
 
   React.useEffect(() => {
     if (sessionUser) {
+      
+      
       setUsername(
         sessionUser.username || sessionUser.email?.split("@")[0] as string
       );

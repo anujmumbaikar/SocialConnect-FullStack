@@ -26,14 +26,14 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (status === 'loading') return
-
+  
     const fetchUserData = async () => {
       try {
         setLoading(true)
         const res = await axios.get(`/api/get-user-data?username=${encodeURIComponent(username)}`)
         setProfileData(res.data.user)
-        console.log(res.data.user);
-        
+        console.log("res", res.data.user);
+            
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to load profile')
       } finally {
@@ -89,18 +89,14 @@ export default function ProfilePage() {
               <img
                 src={
                   profileData.avatar ||
-                  profileData.image ||
-                  'https://www.svgrepo.com/show/452030/avatar-default.svg'
+                  profileData.image
                 }
                 alt={profileData.username || "User"}
                 className="w-full h-full rounded-full object-cover"
-                onError={(e) =>
-                  ((e.target as HTMLImageElement).src = '/default-avatar.png')
-                }
+                
               />
             </div>
           </div>
-
           {/* Profile Info */}
           <div className="flex flex-col w-full">
             <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
