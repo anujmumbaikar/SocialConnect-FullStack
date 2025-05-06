@@ -5,7 +5,7 @@ export interface IUser{
     username:string;
     fullname?:string;
     email:string;
-    password?:string;  //if google login, password is not required
+    password?:string;
     avatar?:string;
     provider:"credential" | "google" | "facebook" | "github";
     verificationCode:string;
