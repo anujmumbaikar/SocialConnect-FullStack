@@ -94,6 +94,9 @@ export default function DashboardPage() {
                     >
                       <Avatar>
                         <AvatarImage src={user.avatar} alt={user.username} />
+                        <AvatarFallback className="bg-purple-100 text-purple-800">
+                          {user.username.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
                       </Avatar>
                       <span className="text-sm">{user.username}</span>
                     </div>
@@ -273,6 +276,9 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-2">
                         <Avatar>
                           <AvatarImage src={user.avatar} alt={user.username} />
+                          <AvatarFallback className="bg-purple-100 text-purple-800">
+                            {user.username.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
                         </Avatar>
                         <span className="text-sm">{user.username}</span>
                       </div>
