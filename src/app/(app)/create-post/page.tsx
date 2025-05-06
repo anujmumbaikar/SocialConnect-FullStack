@@ -7,14 +7,19 @@ import {
   ImageKitUploadNetworkError,
   upload,
 } from "@imagekit/next";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-
+import { toast } from "sonner";
 const POST_DIMENSIONS = {
   width: 1080,
   height: 1920,
 } as const;
 
 const UploadExample = () => {
+    const { data: session } = useSession();
+    const user = session?.user;
+    const router = useRouter();
   const [progress, setProgress] = useState(0);
   const [caption, setCaption] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -79,11 +84,11 @@ const UploadExample = () => {
       const result = await dbResponse.json();
 
       if (dbResponse.ok) {
-        alert("Post created successfully!");
-        console.log("Saved in DB:", result);
+        toast.success("Post uploaded successfully!");
         setCaption("");
         setProgress(0);
         if (fileInputRef.current) fileInputRef.current.value = "";
+        router.push(`/${user?.username}`);
       } else {
         console.error("DB error:", result);
         alert("Failed to save post in DB.");
