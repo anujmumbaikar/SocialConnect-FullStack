@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User, { IUser } from "./user.model";
 
 export const VIDEO_DIMENSIONS = {
     width: 1080,
@@ -7,7 +8,7 @@ export const VIDEO_DIMENSIONS = {
 export interface IReels{
     reelUrl:string;
     caption:string;
-    userId: mongoose.Types.ObjectId;
+    userId: mongoose.Types.ObjectId | IUser;
     title:string;
     transformation: {
         height: number;

@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import User from "./user.model";
 
 export const POST_DIMENSIONS = {
-    width: 1024,
-    height: 1536,
+    width: 920,
+    height: 1482,
 }
 
 // Base Post interface

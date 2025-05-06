@@ -54,7 +54,7 @@ export default function DashboardPage() {
 
     const fetchPosts = async () => {
       try {
-        const response = await fetch("/api/get-posts?populateUser=true");
+        const response = await fetch("/api/get-posts");
         if (!response.ok) throw new Error("Failed to fetch posts");
         const data = await response.json();
         setPosts(data.posts || []);
@@ -91,7 +91,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-slate-50 min-h-screen w-[82vw]">
       <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Sidebar */}
         <div className="hidden lg:block lg:col-span-3">

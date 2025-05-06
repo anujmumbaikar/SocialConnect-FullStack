@@ -99,7 +99,7 @@ export default function ReelsPage() {
   const currentReel = reels[currentReelIndex];
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-slate-50 min-h-screen w-[82vw]">
       <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         {/* Left Sidebar */}
         <div className="hidden lg:block lg:w-64">

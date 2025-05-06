@@ -1,12 +1,29 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Heart, MessageCircle, Bookmark, Zap, Filter, TrendingUp, Grid, Layout } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { IPopulatedPost } from '@/models/post.model';
 
 export default function ExplorePage() {
+  const [posts, setPosts] = useState<IPopulatedPost[]>([]);
+
+  useEffect(()=>{
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("/api/get-posts");
+        if (!response.ok) throw new Error("Failed to fetch posts");
+        const data = await response.json();
+        console.log("Fetched posts:", data.posts);
+        setPosts(data.posts || []);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+    fetchPosts();
+  }, []);
   return (
     <div className="bg-slate-50 w-[82vw]">
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -46,7 +63,7 @@ export default function ExplorePage() {
         <Card className="mb-8 overflow-hidden">
           <CardContent className="p-0 relative aspect-[21/9]">
             <img
-              src="https://plus.unsplash.com/premium_vector-1725522711251-8df86fad1a9e?q=80&w=3600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src="https://static.vecteezy.com/system/resources/previews/017/214/886/non_2x/spring-green-fields-landscape-with-mountain-blue-sky-and-clouds-background-panorama-peaceful-rural-nature-in-springtime-with-green-grass-land-cartoon-illustration-for-spring-and-summer-banner-vector.jpg"
               alt="Featured post"
               className="w-full h-full object-cover"
             />
@@ -80,14 +97,14 @@ export default function ExplorePage() {
 
         {/* Content Grid - Modified but keeping the essence */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[...Array(20)].map((_, i) => (
+          {posts.map((posts) => (
             <div 
-              key={i} 
+              key={posts._id} 
               className="aspect-square relative group cursor-pointer bg-slate-200 rounded-lg overflow-hidden shadow-sm transition-transform duration-200 hover:shadow-md hover:scale-[1.02]"
             >
               <img
-                src={`/api/placeholder/600/600`}
-                alt={`Explore ${i}`}
+                src={`${posts.postUrl}`}
+                alt={`Explore`}
                 className="w-full h-full object-cover"
               />
               
@@ -113,10 +130,6 @@ export default function ExplorePage() {
                       <MessageCircle className="h-4 w-4" />
                       <span className="text-sm font-medium">{Math.floor(Math.random() * 100)}</span>
                     </div>
-                  </div>
-                  
-                  <div className="h-6 w-6 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                    {i % 3 === 0 ? 'HD' : i % 3 === 1 ? '4K' : '8K'}
                   </div>
                 </div>
               </div>
