@@ -1,21 +1,13 @@
 import { VIDEO_DIMENSIONS } from '@/models/reels.model';
 import { Video } from '@imagekit/next';
-export default function PostComponent({src,caption,aspectRatio}: {src:string, caption:string, aspectRatio?: number}) {
+export default function Page() {
   return (
-    <div>
-      <Video
+    <Video
       urlEndpoint="https://ik.imagekit.io/anujmumbaikar12"
-      priority={true} // {false} | {true}
-      src={src || ""}
-      width={VIDEO_DIMENSIONS.width}
-      height={VIDEO_DIMENSIONS.height}
-      alt="Picture of the author"
-      transformation={[{ width:VIDEO_DIMENSIONS.width, height: VIDEO_DIMENSIONS.height, quality: 80 }]}
-      
-      style={{
-        objectFit: 'contain',
-      }}
+      src="/video.mp4"
+      controls
+      width={500}
+      height={500}
     />
-    </div>
   )
 }

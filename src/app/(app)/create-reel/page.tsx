@@ -71,7 +71,7 @@ const UploadReel = () => {
         abortSignal: abortController.signal,
       });
 
-      const dbResponse = await fetch("/api/upload-reel", {
+      const dbResponse = await fetch("/api/upload-reels", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
