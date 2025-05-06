@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
         const newReel = await Reel.create({
             reelUrl,
             caption,
+            title,
             transformation,
             userId: session.user._id, // or session.user.id depending on your session object
         });

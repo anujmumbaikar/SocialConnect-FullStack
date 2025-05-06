@@ -6,6 +6,7 @@ export const VIDEO_DIMENSIONS = {
     height: 1920,
 } as const;
 export interface IReel{
+    _id: string;
     reelUrl:string;
     caption:string;
     userId: mongoose.Types.ObjectId | IUser;
@@ -15,6 +16,9 @@ export interface IReel{
         width: number;
         quality?: number;
     },
+}
+export interface IPopulatedReel extends Omit<IReel, 'userId'> {
+    userId: IUser;
 }
 const reelsSchema = new mongoose.Schema<IReel>({
     reelUrl:{
