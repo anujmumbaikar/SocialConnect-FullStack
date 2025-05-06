@@ -15,14 +15,14 @@ import {
   Compass,
   Film,
   MessageSquare,
-  User,
   TrendingUp,
   Bookmark,
   Bell,
   Settings,
   Plus,
+  LogIn,
 } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,23 +31,50 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import axios from "axios";
 
 export function AppSidebar({ ...props }) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [expanded, setExpanded] = React.useState(true);
+  const [profileData, setProfileData] = React.useState({
+    username: "",
+    avatar: "",
+    isLoggedIn: false
+  });
 
-  const sessionUser = session?.user;
-  const [username, setUsername] = React.useState("User");
-  const [avatar, setAvatar] = React.useState("");
-
+  // Fetch user profile data when logged in
   React.useEffect(() => {
-    if (sessionUser) {
-      setUsername(
-        sessionUser.username || (sessionUser.email?.split("@")[0] as string)
-      );
-      setAvatar(session.user.avatar || session.user.image || "");
-    }
+    const fetchProfileData = async () => {
+      if (status === "authenticated") {
+        try {
+          const { data } = await axios.get('/api/my-profile-data');
+          if (data.user) {
+            setProfileData({
+              username: data.user.username || session?.user?.email?.split('@')[0] || "User",
+              avatar: data.user.avatar || session?.user?.image || "",
+              isLoggedIn: true
+            });
+          }
+        } catch (error) {
+          if (session?.user) {
+            setProfileData({
+              username: session.user.username || session.user.email?.split('@')[0] || "User",
+              avatar: session.user.avatar || session.user.image || "",
+              isLoggedIn: true
+            });
+          }
+        }
+      } else {
+        setProfileData({
+          username: "",
+          avatar: "",
+          isLoggedIn: false
+        });
+      }
+    };
+
+    fetchProfileData();
   }, [session]);
 
   const menuItems = [
@@ -188,46 +215,67 @@ export function AppSidebar({ ...props }) {
           </SidebarMenu>
         </SidebarContent>
 
+        {/* User Profile Section */}
         <div className="mt-auto mb-4 px-3">
-          <Button
-            variant="ghost"
-            onClick={() => router.push(`/${username}`)}
-            className={`
-            w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
-            ${expanded ? "justify-start" : "justify-center"}
-          `}
-          >
-            <Avatar className="h-9 w-9 ring-2 ring-purple-100">
-              {avatar ? (
-                <AvatarImage src={avatar} alt={username} />
-              ) : (
-                <AvatarFallback className="bg-purple-100 text-purple-800 font-medium">
-                  {username?.substring(0, 2).toUpperCase()}
-                </AvatarFallback>
+          {profileData.isLoggedIn ? (
+            // Show user profile when logged in
+            <Button
+              variant="ghost"
+              onClick={() => router.push(`/${profileData.username}`)}
+              className={`
+                w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
+                ${expanded ? "justify-start" : "justify-center"}
+              `}
+            >
+              <Avatar className="h-9 w-9 ring-2 ring-purple-100">
+                {profileData.avatar ? (
+                  <AvatarImage src={profileData.avatar} alt={profileData.username} />
+                ) : (
+                  <AvatarFallback className="bg-purple-100 text-purple-800 font-medium">
+                    {profileData.username?.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+  
+              {expanded && (
+                <div className="text-left">
+                  <p className="text-sm font-medium">{profileData.username}</p>
+                  <p className="text-xs text-slate-500">View Profile</p>
+                </div>
               )}
-            </Avatar>
-            {expanded && (
-              <div className="text-left">
-                <p className="text-sm font-medium">{username}</p>
-                <p className="text-xs text-slate-500">View Profile</p>
-              </div>
-            )}
-          </Button>
+            </Button>
+          ) : (
+            // Show sign-in button when logged out
+            <Button
+              variant="outline"
+              onClick={() => signIn()}
+              className={`
+                w-full rounded-lg p-3 flex items-center gap-3 border-purple-200 hover:bg-purple-50 hover:border-purple-300
+                ${expanded ? "justify-start" : "justify-center"}
+              `}
+            >
+              <LogIn className="h-5 w-5 text-purple-600" />
+              {expanded && <span className="font-medium text-sm">Sign In</span>}
+            </Button>
+          )}
         </div>
 
-        <div className="px-3 pb-4">
-          <Button
-            variant="ghost"
-            onClick={() => router.push("/settings")}
-            className={`
-            w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
-            ${expanded ? "justify-start" : "justify-center"}
-          `}
-          >
-            <Settings className="h-5 w-5 text-slate-600" />
-            {expanded && <span className="font-medium text-sm">Settings</span>}
-          </Button>
-        </div>
+        {/* Settings button - only visible when logged in */}
+        {profileData.isLoggedIn && (
+          <div className="px-3 pb-4">
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/settings")}
+              className={`
+                w-full rounded-lg p-3 flex items-center gap-3 hover:bg-slate-100
+                ${expanded ? "justify-start" : "justify-center"}
+              `}
+            >
+              <Settings className="h-5 w-5 text-slate-600" />
+              {expanded && <span className="font-medium text-sm">Settings</span>}
+            </Button>
+          </div>
+        )}
 
         <SidebarRail className="bg-slate-50" />
       </Sidebar>
