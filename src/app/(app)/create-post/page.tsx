@@ -17,9 +17,9 @@ const POST_DIMENSIONS = {
 } as const;
 
 const UploadExample = () => {
-    const { data: session } = useSession();
-    const user = session?.user;
-    const router = useRouter();
+  const { data: session } = useSession();
+  const user = session?.user;
+  const router = useRouter();
   const [progress, setProgress] = useState(0);
   const [caption, setCaption] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -44,6 +44,11 @@ const UploadExample = () => {
     }
 
     const file = fileInput.files[0];
+    if (!file.type.startsWith("image/")) {
+      alert("Only image files are allowed.");
+      return;
+    }
+
     setUploading(true);
 
     try {
@@ -93,7 +98,6 @@ const UploadExample = () => {
         console.error("DB error:", result);
         alert("Failed to save post in DB.");
       }
-
     } catch (error) {
       console.error("Error during upload or save:", error);
       alert("Upload failed. Check console.");

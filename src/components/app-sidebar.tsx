@@ -106,13 +106,13 @@ export function AppSidebar({ ...props }) {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right" align="start" className="w-48">
-            <DropdownMenuItem onClick={() => router.push("/create/story")}>
+            <DropdownMenuItem onClick={() => router.push("/create-story")}>
               📖 Add Story
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => router.push("/create/post")}>
+            <DropdownMenuItem onClick={() => router.push("/create-post")}>
               📝 Add Post
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => router.push("/create/reel")}>
+            <DropdownMenuItem onClick={() => router.push("/create-reel")}>
               🎥 Add Reel
             </DropdownMenuItem>
           </DropdownMenuContent>

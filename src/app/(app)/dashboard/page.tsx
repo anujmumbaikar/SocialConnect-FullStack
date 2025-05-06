@@ -22,6 +22,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Image } from "@imagekit/next";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -167,10 +168,13 @@ export default function DashboardPage() {
                   </CardHeader>
 
                   <div className="w-full aspect-video bg-slate-100 overflow-hidden">
-                    <img
-                      src={`/api/placeholder/800/500`}
-                      alt="Post content"
-                      className="object-cover w-full h-full"
+                    <Image
+                      urlEndpoint="https://ik.imagekit.io/anujmumbaikar12"
+                      src="/profile.png"
+                      width={500}
+                      height={500}
+                      alt="Picture of the author"
+                      transformation={[{ width: 500, height: 500 }]}
                     />
                   </div>
 
