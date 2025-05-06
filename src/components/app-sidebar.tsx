@@ -25,11 +25,9 @@ import {
   VideoIcon,
   FileText,
   ChevronRight,
-  Moon,
-  LogOut,
   ChevronLeft,
 } from "lucide-react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -248,18 +246,21 @@ export function AppSidebar({ ...props }) {
                   <SidebarMenuButton
                     onClick={() => handleNavigate(item.path)}
                     className={`
-                      flex items-center gap-3 py-3 px-4 rounded-lg transition-all duration-200
+                      flex items-center gap-3 py-3 px-4 rounded-lg transition-all duration-200 relative
                       ${activeItem === item.path 
                         ? 'bg-purple-100 text-purple-700 font-medium' 
                         : 'text-slate-600 hover:bg-slate-100 hover:text-purple-600'}
                       ${expanded ? "justify-start" : "justify-center"}
                     `}
                   >
-                    <div className="relative">
+                    <div className="relative flex items-center justify-center">
+                      <div className={`
+                        ${activeItem === item.path ? "" : "absolute inset-0 rounded-full bg-purple-100 scale-0 transition-transform duration-200 group-hover:scale-100"}
+                      `}></div>
                       <item.icon
                         className={`${expanded ? "h-5 w-5" : "h-6 w-6"} ${
                           activeItem === item.path ? "text-purple-600" : ""
-                        }`}
+                        } relative z-10`}
                       />
                       {item.badge && (
                         <span className="absolute -top-1.5 -right-1.5 bg-purple-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
@@ -312,36 +313,18 @@ export function AppSidebar({ ...props }) {
                 )}
               </Button>
 
-              {/* Additional buttons when expanded */}
+              {/* Settings button when expanded */}
               {expanded && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    onClick={() => router.push("/settings")}
-                    className="flex-1 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-slate-100"
-                  >
+                <Button
+                  variant="ghost"
+                  onClick={() => router.push("/settings")}
+                  className="w-full rounded-lg py-2.5 flex items-center justify-start gap-2 hover:bg-slate-100"
+                >
+                  <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
                     <Settings className="h-4 w-4 text-slate-600" />
-                    <span className="text-xs font-medium">Settings</span>
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    onClick={() => {/* Toggle theme */}}
-                    className="flex-1 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-slate-100"
-                  >
-                    <Moon className="h-4 w-4 text-slate-600" />
-                    <span className="text-xs font-medium">Theme</span>
-                  </Button>
-                  
-                  <Button
-                    variant="ghost"
-                    onClick={() => signOut()}
-                    className="flex-1 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-slate-100 hover:text-red-500"
-                  >
-                    <LogOut className="h-4 w-4 text-slate-600" />
-                    <span className="text-xs font-medium">Logout</span>
-                  </Button>
-                </div>
+                  </div>
+                  <span className="text-sm font-medium">Settings</span>
+                </Button>
               )}
             </div>
           ) : (
@@ -355,7 +338,10 @@ export function AppSidebar({ ...props }) {
                 ${expanded ? "justify-start" : "justify-center"}
               `}
             >
-              <LogIn className="h-5 w-5 text-purple-600" />
+              <div className="relative flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full bg-purple-200 scale-0 transition-transform duration-200 group-hover:scale-100"></div>
+                <LogIn className="h-5 w-5 text-purple-600 relative z-10" />
+              </div>
               {expanded && <span className="font-medium text-sm">Sign In</span>}
             </Button>
           )}
@@ -364,40 +350,15 @@ export function AppSidebar({ ...props }) {
         {/* Settings button when collapsed and logged in */}
         {!expanded && profileData.isLoggedIn && (
           <div className="mb-4 px-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="w-full rounded-lg p-2 flex items-center justify-center hover:bg-slate-100"
-                >
-                  <Settings className="h-5 w-5 text-slate-600" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="right" align="end" className="w-48 p-2 rounded-xl">
-                <DropdownMenuItem 
-                  onClick={() => router.push("/settings")}
-                  className="flex items-center gap-2 py-2 px-3 rounded-lg"
-                >
-                  <Settings className="h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => {/* Toggle theme */}}
-                  className="flex items-center gap-2 py-2 px-3 rounded-lg"
-                >
-                  <Moon className="h-4 w-4" />
-                  <span>Theme</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="my-1" />
-                <DropdownMenuItem 
-                  onClick={() => signOut()}
-                  className="flex items-center gap-2 py-2 px-3 rounded-lg text-red-500 hover:text-red-600"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Logout</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/settings")}
+              className="w-full rounded-lg p-2 flex items-center justify-center hover:bg-slate-100"
+            >
+              <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
+                <Settings className="h-4 w-4 text-slate-600" />
+              </div>
+            </Button>
           </div>
         )}
 

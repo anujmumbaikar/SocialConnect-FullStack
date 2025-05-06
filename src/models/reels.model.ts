@@ -5,7 +5,7 @@ export const VIDEO_DIMENSIONS = {
     width: 1080,
     height: 1920,
 } as const;
-export interface IReels{
+export interface IReel{
     reelUrl:string;
     caption:string;
     userId: mongoose.Types.ObjectId | IUser;
@@ -16,7 +16,7 @@ export interface IReels{
         quality?: number;
     },
 }
-const reelsSchema = new mongoose.Schema<IReels>({
+const reelsSchema = new mongoose.Schema<IReel>({
     reelUrl:{
         type: String,
         required: true,
@@ -49,5 +49,5 @@ const reelsSchema = new mongoose.Schema<IReels>({
         }
     }
 },{timestamps:true});
-const Reels = mongoose.models?.Reels || mongoose.model<IReels>("Reel", reelsSchema);
-export default Reels;
+const Reel = mongoose.models?.Reels || mongoose.model<IReel>("Reel", reelsSchema);
+export default Reel;

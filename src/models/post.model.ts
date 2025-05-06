@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import User from "./user.model";
-
+import User,{IUser} from "./user.model";
 export const POST_DIMENSIONS = {
     width: 920,
     height: 1482,
@@ -22,12 +21,7 @@ export interface IPost {
 }
 
 // For populated user data
-export interface IUser {
-    _id: string;
-    username: string;
-    avatar: string;
-    // Add other user fields as needed
-}
+
 
 // Interface for populated posts
 export interface IPopulatedPost extends Omit<IPost, 'userId'> {
