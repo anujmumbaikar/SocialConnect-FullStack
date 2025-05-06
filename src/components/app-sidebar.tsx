@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { useSession, signIn } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -280,7 +280,7 @@ export function AppSidebar({ ...props }) {
           </SidebarMenu>
         </SidebarContent>
 
-        {/* User Profile Section */}
+
         <div className="mt-auto mb-3 px-3">
           {profileData.isLoggedIn ? (
             <div className="space-y-2">
@@ -329,12 +329,13 @@ export function AppSidebar({ ...props }) {
             </div>
           ) : (
             // Show sign-in button when logged out
-            <Button
+            <div className="mb-10">
+              <Button
               variant="outline"
               onClick={() => signIn()}
               className={`
-                w-full rounded-lg p-3 flex items-center gap-3 
-                border-purple-200 bg-purple-50 hover:bg-purple-100 hover:border-purple-300 shadow-sm
+                w-full rounded-lg p-3 flex items-center gap-3 py-4
+                border-purple-200 bg-purple-50 hover:bg-purple-100 hover:border-purple-300 shadow-md
                 ${expanded ? "justify-start" : "justify-center"}
               `}
             >
@@ -342,8 +343,9 @@ export function AppSidebar({ ...props }) {
                 <div className="absolute inset-0 rounded-full bg-purple-200 scale-0 transition-transform duration-200 group-hover:scale-100"></div>
                 <LogIn className="h-5 w-5 text-purple-600 relative z-10" />
               </div>
-              {expanded && <span className="font-medium text-sm">Sign In</span>}
+              {expanded && <span className="font-bold text-md">Sign In</span>}
             </Button>
+            </div>
           )}
         </div>
 
