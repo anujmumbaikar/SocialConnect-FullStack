@@ -95,7 +95,9 @@ export default function DashboardPage() {
                       <Avatar>
                         <AvatarImage src={user.avatar} alt={user.username} />
                         <AvatarFallback className="bg-purple-100 text-purple-800">
-                          {user.username.substring(0, 2).toUpperCase()}
+                          {user.username
+                            ? user.username.substring(0, 2).toUpperCase()
+                            : "NA"}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-sm">{user.username}</span>
@@ -277,7 +279,9 @@ export default function DashboardPage() {
                         <Avatar>
                           <AvatarImage src={user.avatar} alt={user.username} />
                           <AvatarFallback className="bg-purple-100 text-purple-800">
-                            {user.username.substring(0, 2).toUpperCase()}
+                            {user.username
+                              ? user.username.substring(0, 2).toUpperCase()
+                              : "NA"}
                           </AvatarFallback>
                         </Avatar>
                         <span className="text-sm">{user.username}</span>
