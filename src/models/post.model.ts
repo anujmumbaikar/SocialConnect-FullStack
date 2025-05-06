@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-
+import User from "./user.model";
 export const POST_DIMENSIONS = {
     width: 1080,
     height: 1920,
@@ -8,7 +7,7 @@ export const POST_DIMENSIONS = {
 export interface IPost{
     postUrl:string;
     caption:string;
-    userId: mongoose.Types.ObjectId;
+    userId: mongoose.Schema.Types.ObjectId
     transformation: {
         height: number;
         width: number;

@@ -81,66 +81,69 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account, profile }) {
       await dbConnect();
+    
+      // First-time login with OAuth
       if (account && profile) {
         const provider = account.provider;
-        let existingUser = await User.findOne({ email: profile.email });
-        if (existingUser) {
-          // User exists - link this OAuth account if not already linked
-          if (existingUser.provider !== provider) {
-            // Update user with this provider info
-            existingUser.provider = provider;
-            if (!existingUser.avatar && (profile as any).picture) {
-              existingUser.avatar = (profile as any).picture;
-            }
-            existingUser.isVerified = true;
-            await existingUser.save();
-          }
-          token.id = existingUser._id.toString();
-          token.provider = provider;
-        } else {
-          // Create new user for this OAuth account
-          const newUser = await User.create({
+        let dbUser = await User.findOne({ email: profile.email });
+    
+        if (!dbUser) {
+          dbUser = await User.create({
             email: profile.email,
             username: (profile.email as string).split("@")[0],
-            provider: provider,
+            provider,
             avatar: (profile as any).picture || (profile as any).avatar_url || "",
             isVerified: true,
             verificationCode: "",
             verificationCodeExpires: new Date(),
           });
-          
-          token.id = newUser._id.toString();
-          token.provider = provider;
+        } else {
+          dbUser.provider = provider;
+          if (!dbUser.avatar && (profile as any).picture) {
+            dbUser.avatar = (profile as any).picture;
+          }
+          dbUser.isVerified = true;
+          await dbUser.save();
         }
-      }
-      if (user) {
-        token._id = user._id;
+    
+        token._id = dbUser._id.toString();
+        token.email = dbUser.email;
+        token.username = dbUser.username;
+        token.fullname = dbUser.fullname;
+        token.avatar = dbUser.avatar;
+        token.bio = dbUser.bio;
+        token.gender = dbUser.gender;
+        token.provider = dbUser.provider;
+    
+      } else if (user) {
+        // Credentials provider
+        token._id = user.id;
         token.email = user.email;
         token.username = user.username;
-        // Only add these if they're used for UI rendering
         token.fullname = user.fullname;
         token.avatar = user.avatar;
         token.bio = user.bio;
+        token.gender = user.gender;
+        token.provider = user.provider;
       }
-      
-      return token;
-    },
     
+      return token;
+    },    
     async session({ session, token }) {
-      // Only transfer essential data from token to session
       if (token && session.user) {
         session.user._id = token._id as string;
         session.user.email = token.email as string;
         session.user.username = token.username as string;
-        if (token.fullname) session.user.fullname = token.fullname as string;
-        if (token.avatar) session.user.avatar = token.avatar as string;
-        if (token.bio) session.user.bio = token.bio as string;
-        if(token.gender) session.user.gender = token.gender as string;
+        session.user.fullname = token.fullname as string;
+        session.user.avatar = token.avatar as string;
+        session.user.bio = token.bio as string;
+        session.user.gender = token.gender as string;
         session.user.provider = token.provider as string;
       }
-      
+    
       return session;
-    },
+    }
+    
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
