@@ -31,6 +31,8 @@ export default function ProfilePage() {
       try {
         setLoading(true)
         const res = await axios.get(`/api/get-user-data?username=${encodeURIComponent(username)}`)
+        console.log(res.data.user.avatar);
+        
         setProfileData(res.data.user)
             
       } catch (err: any) {

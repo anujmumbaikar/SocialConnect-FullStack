@@ -2,27 +2,44 @@ import { useRef, useEffect, useState } from 'react';
 
 export default function ReelComponent({ src }: { src: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [muted, setMuted] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
+  // Observe visibility
   useEffect(() => {
-    if (!videoRef.current) return;
-    if (isPlaying) {
-      videoRef.current.play().catch(() => {});
-    } else {
-      videoRef.current.pause();
-    }
-  }, [isPlaying]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.8 }
+    );
 
+    const videoEl = videoRef.current;
+    if (videoEl) observer.observe(videoEl);
+
+    return () => {
+      if (videoEl) observer.unobserve(videoEl);
+    };
+  }, []);
+
+  // Play/Pause based on visibility
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isVisible) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [isVisible]);
+
+  // Update mute state
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = muted;
     }
   }, [muted]);
-
-  const handleVideoClick = () => {
-    setIsPlaying((prev) => !prev);
-  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -30,10 +47,9 @@ export default function ReelComponent({ src }: { src: string }) {
         ref={videoRef}
         src={src}
         autoPlay
-        muted={muted}
         playsInline
         loop
-        onClick={handleVideoClick}
+        muted={muted}
         style={{
           objectFit: 'cover',
           width: '100%',

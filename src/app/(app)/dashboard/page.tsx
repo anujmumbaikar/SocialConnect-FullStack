@@ -57,7 +57,7 @@ export default function DashboardPage() {
         const response = await fetch("/api/get-posts");
         if (!response.ok) throw new Error("Failed to fetch posts");
         const data = await response.json();
-        setPosts(data.posts || []);
+        setPosts(data.posts || []);     
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -126,7 +126,7 @@ export default function DashboardPage() {
                       className="flex items-center gap-3 p-2 hover:bg-slate-100 rounded-md cursor-pointer transition-colors"
                       onClick={() => router.push(`/${user.username}`)}
                     >
-                      <Avatar>
+                     <Avatar className="border border-red-500">
                         <AvatarImage src={user.avatar} alt={user.username} />
                         <AvatarFallback className="bg-purple-100 text-purple-800">
                           {user.username
