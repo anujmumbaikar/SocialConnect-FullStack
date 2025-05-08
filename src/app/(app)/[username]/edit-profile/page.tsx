@@ -24,8 +24,9 @@ import { Loader2 } from "lucide-react";
 import { useDebounceCallback } from "usehooks-ts";
 import { useRouter } from "next/navigation";
 import { editProfileSchema } from "@/schemas/editProfileSchema";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useSession } from "next-auth/react";
+import ApiResponse from "@/types/ApiResponse";
 
 export default function EditProfile() {
   const [username, setUsername] = useState<string>("");
@@ -42,11 +43,11 @@ export default function EditProfile() {
   const form = useForm<z.infer<typeof editProfileSchema>>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      username:"",
-      fullname: "",
-      avatar: "https://www.svgrepo.com/show/452030/avatar-default.svg",
-      bio: "",
-      gender: "",
+      username: user?.username || "",
+      fullname: user?.fullname ||"",
+      avatar: user?.avatar || "https://www.svgrepo.com/show/452030/avatar-default.svg",
+      bio: user?.bio || "" ,
+      gender: user?.gender || "",
     }
   });
 
@@ -67,12 +68,13 @@ export default function EditProfile() {
     const checkUsernameUniqueness = async () => {
       if (username) {
         setIsUsernameChecking(true);
-        setUsernameMessage("Checking username...");
+        setUsernameMessage('');
         try {
           const response = await axios.get(`/api/check-username-unique?username=${username}`);
           setUsernameMessage(response.data.message);
         } catch (error) {
-          toast.error("Error checking username uniqueness");
+          const AxiosError = error as AxiosError<ApiResponse>
+          setUsernameMessage(AxiosError.response?.data.message ?? "error in checking username")
         } finally {
           setIsUsernameChecking(false);
         }
@@ -85,6 +87,24 @@ export default function EditProfile() {
     // Implement avatar change functionality
     toast.info("Avatar change functionality to be implemented");
   };
+  // const authenticator = async () => {
+  //   const res = await fetch("/api/imagekit-auth");
+  //   if (!res.ok) throw new Error(await res.text());
+  //   return await res.json();
+  // };
+
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file && file.type.startsWith("video/")) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => setPreviewUrl(reader.result as string);
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     toast.error("Only video files are allowed");
+  //     fileInputRef.current && (fileInputRef.current.value = "");
+  //     setPreviewUrl(null);
+  //   }
+  // };
 
   const onSubmit = async (data: z.infer<typeof editProfileSchema>) => {
     setIsSubmitting(true);
