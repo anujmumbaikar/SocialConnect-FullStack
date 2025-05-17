@@ -1,29 +1,32 @@
 import mongoose from "mongoose";
 
-export interface ILike{
-    postId?: mongoose.Types.ObjectId;
-    userId?: mongoose.Types.ObjectId;
-    reelId: mongoose.Types.ObjectId;
+export interface ILike {
+    userId: mongoose.Types.ObjectId;
+    targetId: mongoose.Types.ObjectId;
+    targetType: "Post" | "Reel";
     isLike: boolean;
 }
 const likeSchema = new mongoose.Schema<ILike>({
-    postId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
-    },
-    userId:{
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
-    reelId:{
+    targetId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Reel",
+        required: true,
+        refPath: "targetType",
     },
-    isLike:{
+    targetType: {
+        type: String,
+        required: true,
+        enum: ["Post", "Reel"],
+    },
+    isLike: {
         type: Boolean,
         default: false,
     },
-},{timestamps:true});
+}, { timestamps: true });
+
 const Like = mongoose.models?.Like || mongoose.model<ILike>("Like", likeSchema);
 export default Like;
