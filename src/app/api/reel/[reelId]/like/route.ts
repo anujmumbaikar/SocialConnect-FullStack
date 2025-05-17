@@ -7,7 +7,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 export async function POST(req: NextRequest) {
   await dbConnect();
   const session = await getServerSession(authOptions);
-
   const { searchParams } = new URL(req.url);
   const reelId = searchParams.get("reelId");
 
@@ -19,7 +18,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "You need to sign in first" }, { status: 401 });
   }
 
-  const existingLike = await Like.findOne({ reelId, userId });
+  const existingLike = await Like.findOne({ targetId: reelId, userId, targetType: "Reel" });
 
   if (existingLike) {
     existingLike.isLike = !existingLike.isLike;
@@ -28,7 +27,7 @@ export async function POST(req: NextRequest) {
       message: existingLike.isLike ? "Liked" : "Unliked",
     }, { status: 200 });
   }
-  await Like.create({ reelId, userId, isLike: true });
 
+  await Like.create({ targetId: reelId, userId, targetType: "Reel", isLike: true });
   return NextResponse.json({ message: "Liked" }, { status: 201 });
 }

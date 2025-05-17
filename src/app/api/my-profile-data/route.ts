@@ -14,13 +14,10 @@ export async function GET(req: Request) {
                 { status: 401 }
             );
         }
-        // Handle different session user ID formats
-        // NextAuth typically uses email or id rather than _id
         const userId = session.user._id;
         console.log("Session user ID:", userId);
         
         if (!userId) {
-            // If no ID is found, try to find the user by email
             if (session.user.email) {
                 const userByEmail = await User.findOne({ email: session.user.email })
                     .select("-password -__v")

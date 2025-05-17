@@ -53,5 +53,5 @@ const reelsSchema = new mongoose.Schema<IReel>({
         }
     }
 },{timestamps:true});
-const Reel = mongoose.models?.Reels || mongoose.model<IReel>("Reel", reelsSchema);
+const Reel = mongoose.models.Reel || mongoose.model<IReel>("Reel", reelsSchema);
 export default Reel;
