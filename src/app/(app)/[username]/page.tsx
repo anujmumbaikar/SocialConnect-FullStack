@@ -21,7 +21,6 @@ export default function ProfilePage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("posts");
 
-  // Check if the logged-in user is viewing their own profile
   const isOwnProfile =
     session?.user &&
     (profileData?.user.email === session.user.email ||
@@ -45,21 +44,6 @@ export default function ProfilePage() {
     };
     fetchUserData();
   }, [username, status]);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const res = await axios.get(
-          `/api/get-user-data?username=${encodeURIComponent(username)}`
-        );
-        console.log(res.data);
-      } catch (err: any) {
-        setError(err.response?.data?.message || "Failed to load profile");
-      }
-    };
-    fetchUserData();
-  }, []);
-
   const handleLogout = () => signOut();
   const handleProfileClick = () => router.push(`/${username}/stories`);
 
