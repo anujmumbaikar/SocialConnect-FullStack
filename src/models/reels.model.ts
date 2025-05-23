@@ -16,6 +16,8 @@ export interface IReel{
         width: number;
         quality?: number;
     },
+    createdAt: Date;
+    updatedAt: Date;
 }
 export interface IPopulatedReel extends Omit<IReel, 'userId'> {
     userId: IUser;
