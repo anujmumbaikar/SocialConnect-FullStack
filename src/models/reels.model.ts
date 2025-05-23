@@ -9,7 +9,7 @@ export interface IReel{
     _id: string;
     reelUrl:string;
     caption:string;
-    userId: mongoose.Types.ObjectId | IUser;
+    userId:IUser;
     title:string;
     transformation: {
         height: number;

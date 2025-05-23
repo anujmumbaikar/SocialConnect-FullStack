@@ -5,12 +5,11 @@ export const POST_DIMENSIONS = {
     height: 1482,
 }
 
-// Base Post interface
 export interface IPost {
     _id: string;
     postUrl: string;
     caption: string;
-    userId: mongoose.Schema.Types.ObjectId | IUser;
+    userId:IUser;
     transformation: {
         height: number;
         width: number;
@@ -20,10 +19,6 @@ export interface IPost {
     updatedAt: Date;
 }
 
-// For populated user data
-
-
-// Interface for populated posts
 export interface IPopulatedPost extends Omit<IPost, 'userId'> {
     userId: IUser;
 }
