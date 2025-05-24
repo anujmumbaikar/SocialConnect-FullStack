@@ -5,11 +5,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-
-interface Post {
-  imageUrl: string;
-  [key: string]: any;
-}
+import type { User, Post } from "@/types/types";
 
 export default function ProfilePage() {
   const router = useRouter();

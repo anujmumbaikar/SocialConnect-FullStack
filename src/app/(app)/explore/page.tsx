@@ -6,9 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { IPopulatedPost } from '@/models/post.model';
+import { useRouter } from 'next/navigation';
 
 export default function ExplorePage() {
   const [posts, setPosts] = useState<IPopulatedPost[]>([]);
+  const router = useRouter();
 
   useEffect(()=>{
     const fetchPosts = async () => {
@@ -99,6 +101,7 @@ export default function ExplorePage() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {posts.map((posts) => (
             <div 
+            onClick={() => router.push(`/post/${posts._id}`)}
               key={posts._id} 
               className="aspect-square relative group cursor-pointer bg-slate-200 rounded-lg overflow-hidden shadow-sm transition-transform duration-200 hover:shadow-md hover:scale-[1.02]"
             >

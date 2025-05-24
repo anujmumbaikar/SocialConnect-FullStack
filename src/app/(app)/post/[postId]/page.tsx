@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
-import { IPost } from '@/models/post.model';
+import type { Post } from '@/types/types'; // <-- Use shared type here
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, X } from 'lucide-react';
 
 interface Comment {
@@ -20,13 +20,13 @@ interface Comment {
 
 export default function PostPage() {
   const { postId } = useParams();
-  const [post, setPost] = useState<IPost | null>(null);
+  const [post, setPost] = useState<Post | null>(null); // <-- Use shared type here
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [isBookmarked, setIsBookmarked] = useState(false);
-    const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     if (!postId) return;

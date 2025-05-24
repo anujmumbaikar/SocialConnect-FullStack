@@ -24,7 +24,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IPopulatedPost } from "@/models/post.model";
+import type { Post } from "@/types/types";
 import PostComponent from "@/components/PostComponent";
 
 export default function DashboardPage() {
@@ -34,7 +34,7 @@ export default function DashboardPage() {
   );
   const [loading, setLoading] = useState(true);
   const [searchByUsername, setSearchByUsername] = useState("");
-  const [posts, setPosts] = useState<IPopulatedPost[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [isGridView, setIsGridView] = useState(false);
 
   useEffect(() => {
