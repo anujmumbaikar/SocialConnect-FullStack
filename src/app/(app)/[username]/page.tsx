@@ -3,10 +3,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import type { User, Post } from "@/types/types";
-
 export default function ProfilePage() {
   const router = useRouter();
   const { username } = useParams() as { username: string };

@@ -34,3 +34,19 @@ export interface Post {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Reel {
+  _id: string;
+  reelUrl: string;
+  caption: string;
+  userId: User;
+  title: string;
+  transformation: {
+    height: number;
+    width: number;
+    quality?: number;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+

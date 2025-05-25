@@ -18,11 +18,6 @@ export interface IPost {
     createdAt: Date;
     updatedAt: Date;
 }
-
-export interface IPopulatedPost extends Omit<IPost, 'userId'> {
-    userId: IUser;
-}
-
 const postSchema = new mongoose.Schema<IPost>({
     postUrl: {
         type: String,

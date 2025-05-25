@@ -1,5 +1,4 @@
 "use client";
-
 import {
   upload,
   ImageKitAbortError,
@@ -29,6 +28,9 @@ const UploadReel = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const abortController = new AbortController();
+
+  // Example: If you want to store the uploaded reel in state
+  // const [uploadedReel, setUploadedReel] = useState<Reel | null>(null);
 
   const authenticator = async () => {
     const res = await fetch("/api/imagekit-auth");
