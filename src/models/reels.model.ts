@@ -19,9 +19,6 @@ export interface IReel{
     createdAt: Date;
     updatedAt: Date;
 }
-export interface IPopulatedReel extends Omit<IReel, 'userId'> {
-    userId: IUser;
-}
 const reelsSchema = new mongoose.Schema<IReel>({
     reelUrl:{
         type: String,
