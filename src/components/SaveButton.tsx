@@ -1,16 +1,26 @@
 import axios from "axios";
 import { useState } from "react";
-import { Bookmark } from "lucide-react"; // Example icon
+import { Bookmark } from "lucide-react";
 import { toast } from "sonner";
 
-const SaveButton = ({ postId }: { postId: string }) => {
+interface SaveButtonProps {
+  postId?: string;
+  reelId?: string; 
+}
+
+const SaveButton = ({ postId, reelId }: SaveButtonProps) => {
   const [isSaved, setIsSaved] = useState(false);
 
   const handleToggleSave = async () => {
     try {
-      const response = await axios.post(`/api/post/${postId}/save`);
+      const endpoint = postId
+        ? `/api/post/${postId}/save`
+        : `/api/reel/${reelId}/save`;
+
+      const response = await axios.post(endpoint);
+
       if (response.status === 200 || response.status === 201) {
-        setIsSaved((prev) => !prev); // Toggle the save state
+        setIsSaved((prev) => !prev); 
         toast.success(response.data.message);
       }
     } catch (error) {

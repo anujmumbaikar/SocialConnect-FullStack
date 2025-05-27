@@ -6,6 +6,8 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import type { Post } from '@/types/types'; // <-- Use shared type here
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, X } from 'lucide-react';
+import LikeButton from '@/components/LikeButton';
+import SaveButton from '@/components/SaveButton';
 
 interface Comment {
   _id: string;
@@ -17,7 +19,6 @@ interface Comment {
   text: string;
   createdAt: string;
 }
-
 export default function PostPage() {
   const { postId } = useParams();
   const [post, setPost] = useState<Post>();
@@ -66,7 +67,6 @@ export default function PostPage() {
       text: newComment,
       createdAt: new Date().toISOString()
     };
-    
     setComments(prev => [...prev, newCommentObj]);
     setNewComment('');
     toast.success("Comment added!");
@@ -162,9 +162,8 @@ export default function PostPage() {
             </button>
           </div>
 
-          {/* Comments Section */}
+
           <div className="flex-1 overflow-y-auto min-h-0">
-            {/* Original Caption */}
             {post.caption && (
               <div className="p-4 border-b border-gray-700">
                 <div className="flex items-start space-x-3">
@@ -185,8 +184,6 @@ export default function PostPage() {
                 </div>
               </div>
             )}
-
-            {/* Comments List */}
             <div className="flex-1">
               {comments.length > 0 ? (
                 comments.map((comment) => (
@@ -221,24 +218,10 @@ export default function PostPage() {
               )}
             </div>
           </div>
-
-          {/* Action Buttons & Engagement */}
           <div className="border-t border-gray-700 bg-gray-900">
-            {/* Action Buttons Row */}
             <div className="flex items-center justify-between px-4 py-3">
               <div className="flex items-center space-x-4">
-                <button
-                  onClick={handleLike}
-                  className={`p-2 -m-2 transition-all duration-200 hover:scale-110 ${
-                    isLiked 
-                      ? 'text-red-500' 
-                      : 'text-gray-400 hover:text-red-500'
-                  }`}
-                >
-                  <Heart 
-                    className={`w-6 h-6 ${isLiked ? 'fill-current' : ''}`} 
-                  />
-                </button>
+                <LikeButton postId={post._id}/>
                 <button className="p-2 -m-2 text-gray-400 hover:text-blue-400 transition-all duration-200 hover:scale-110">
                   <MessageCircle className="w-6 h-6" />
                 </button>
@@ -249,30 +232,8 @@ export default function PostPage() {
                   <Send className="w-6 h-6" />
                 </button>
               </div>
-              <button
-                onClick={handleBookmark}
-                className={`p-2 -m-2 transition-all duration-200 hover:scale-110 ${
-                  isBookmarked 
-                    ? 'text-amber-400' 
-                    : 'text-gray-400 hover:text-amber-400'
-                }`}
-              >
-                <Bookmark 
-                  className={`w-6 h-6 ${isBookmarked ? 'fill-current' : ''}`} 
-                />
-              </button>
+              <SaveButton postId={post._id} />
             </div>
-
-            {/* Likes Count */}
-            {likesCount > 0 && (
-              <div className="px-4 pb-3">
-                <p className="font-semibold text-sm text-white">
-                  {likesCount.toLocaleString()} {likesCount === 1 ? 'like' : 'likes'}
-                </p>
-              </div>
-            )}
-
-            {/* Add Comment Form */}
             <div className="border-t border-gray-700 p-4">
               <form onSubmit={handleComment} className="flex items-center space-x-3">
                 <div className="flex-1 flex items-center space-x-3 bg-gray-800 rounded-full px-4 py-2 focus-within:bg-gray-700 focus-within:ring-2 focus-within:ring-blue-500/30 transition-colors">

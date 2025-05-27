@@ -23,6 +23,8 @@ import ReelComponent from "@/components/ReelComponent";
 import axios from "axios";
 import { toast } from "sonner";
 import type { Reel } from "@/types/types";
+import LikeButton from "@/components/LikeButton";
+import SaveButton from "@/components/SaveButton";
 
 export default function ReelsPage() {
   const router = useRouter();
@@ -78,8 +80,6 @@ export default function ReelsPage() {
               className="relative bg-black snap-start rounded-xl overflow-hidden shadow-lg aspect-[9/16] max-h-[95vh] mx-auto"
             >
               <ReelComponent src={reel.reelUrl} />
-
-              {/* Overlay Content */}
               <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
                 <div className="flex items-start mb-3">
                   <Avatar className="h-11 w-11 border-2 border-white mr-3">
@@ -109,10 +109,7 @@ export default function ReelsPage() {
 
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-6">
-                    <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 flex items-center gap-1 px-0">
-                      <Heart className="h-5 w-5" />
-                      <span>Likes</span>
-                    </Button>
+                    <LikeButton reelId={reel._id}/>
                     <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 flex items-center gap-1 px-0">
                       <MessageCircle className="h-5 w-5" />
                       <span>Comments</span>
@@ -121,9 +118,7 @@ export default function ReelsPage() {
                       <Share2 className="h-5 w-5" />
                     </Button>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 px-0">
-                    <Bookmark className="h-5 w-5" />
-                  </Button>
+                  <SaveButton reelId={reel._id} />
                 </div>
               </div>
             </div>

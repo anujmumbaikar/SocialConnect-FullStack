@@ -75,9 +75,8 @@ export default function ProfilePage() {
   return (
     <div className="w-[82vw] flex flex-col mx-auto px-4 py-6">
       <div className="w-full lg:w-[85%] mx-auto">
-        {/* Profile Header */}
         <section className="flex flex-col md:flex-row gap-8 mb-8 items-center md:items-start">
-          {/* Avatar */}
+
           <div
             className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-tr from-yellow-400 to-pink-600 p-0.5 cursor-pointer"
             onClick={handleProfileClick}
@@ -90,7 +89,7 @@ export default function ProfilePage() {
               />
             </div>
           </div>
-          {/* Profile Info */}
+
           <div className="flex flex-col w-full">
             <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
               <h2 className="text-xl font-medium text-center md:text-left">
@@ -199,7 +198,6 @@ export default function ProfilePage() {
           </div>
         </section>
 
-        {/* Highlights */}
         <section className="mb-8">
           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
             {[...Array(5)].map((_, i) => (
@@ -234,7 +232,6 @@ export default function ProfilePage() {
           </div>
         </section>
 
-        {/* Tabs */}
         <section className="border-t border-gray-300">
           <div className="flex justify-around text-sm font-medium">
             <button
@@ -288,7 +285,7 @@ export default function ProfilePage() {
             {isOwnProfile && (
               <button
                 className={`py-3 flex items-center gap-1 ${activeTab === "saved" ? "border-t border-black text-black" : "text-gray-500"}`}
-                onClick={() => setActiveTab("saved")}
+                onClick={() => router.push("/saved")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -338,7 +335,6 @@ export default function ProfilePage() {
           </section>
         )}
 
-        {/* Alternative content for other tabs */}
         {activeTab === "reels" && (
           <section className="grid grid-cols-3 gap-1 md:gap-4">
             {profileData.reels?.length === 0 && (
@@ -418,27 +414,6 @@ export default function ProfilePage() {
               {isOwnProfile
                 ? "When people tag you in photos, they'll appear here."
                 : "This user hasn't been tagged in any posts yet."}
-            </p>
-          </div>
-        )}
-
-        {activeTab === "saved" && isOwnProfile && (
-          <div className="flex flex-col items-center justify-center py-16">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="48"
-              height="48"
-              fill="currentColor"
-              viewBox="0 0 16 16"
-              className="text-gray-400 mb-4"
-            >
-              <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z" />
-            </svg>
-            <h3 className="text-xl font-semibold text-gray-700">
-              No Saved Posts
-            </h3>
-            <p className="text-gray-500 mt-2 text-center max-w-md">
-              Save posts to view them later. Only you can see what you've saved.
             </p>
           </div>
         )}
