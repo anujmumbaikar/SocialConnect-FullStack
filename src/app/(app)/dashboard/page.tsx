@@ -26,6 +26,8 @@ import {
 import { useEffect, useState } from "react";
 import type { Post } from "@/types/types";
 import PostComponent from "@/components/PostComponent";
+import LikeButton from "@/components/LikeButton";
+import SaveButton from "@/components/SaveButton";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -242,29 +244,25 @@ export default function DashboardPage() {
                       onClick={() => router.push(`/post/${post._id}`)}
                     >
                       <div className="aspect-square">
-                        <PostComponent
-                          src={post.postUrl}
-                          caption={post.caption}
-                        />
+                        <PostComponent src={post.postUrl} caption={post.caption} />
                       </div>
                       <CardContent className="p-3">
                         <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
-                            <AvatarImage
-                              src={post.userId.avatar}
-                              alt={post.userId.username}
-                            />
+                            <AvatarImage src={post.userId.avatar} alt={post.userId.username} />
                             <AvatarFallback className="bg-purple-100 text-purple-800 text-xs">
-                              {post.userId.username
-                                ?.substring(0, 2)
-                                .toUpperCase()}
+                              {post.userId.username?.substring(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
-                          <span className="text-xs font-medium">
-                            {post.userId.username}
-                          </span>
+                          <span className="text-xs font-medium">{post.userId.username}</span>
                         </div>
                       </CardContent>
+                      <CardFooter className="py-3 px-4 flex items-center justify-between bg-white">
+                        <div className="flex items-center gap-4">
+                          <LikeButton postId={post._id} />
+                          <SaveButton postId={post._id} />
+                        </div>
+                      </CardFooter>
                     </Card>
                   ))}
                 </div>
@@ -340,37 +338,9 @@ export default function DashboardPage() {
                     </CardContent>
                     <CardFooter className="py-3 px-4 flex items-center justify-between bg-white">
                       <div className="flex items-center gap-4">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center gap-1 px-2 hover:text-pink-600 hover:bg-pink-50"
-                        >
-                          <Heart className="h-5 w-5" />
-                          <span>24</span>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center gap-1 px-2 hover:text-blue-600 hover:bg-blue-50"
-                        >
-                          <MessageSquare className="h-5 w-5" />
-                          <span>8</span>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="px-2 hover:text-green-600 hover:bg-green-50"
-                        >
-                          <Share2 className="h-5 w-5" />
-                        </Button>
+                        <LikeButton postId={post._id} />
+                        <SaveButton postId={post._id} />
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="px-2 hover:text-purple-600 hover:bg-purple-50"
-                      >
-                        <Bookmark className="h-5 w-5" />
-                      </Button>
                     </CardFooter>
                   </Card>
                 ))

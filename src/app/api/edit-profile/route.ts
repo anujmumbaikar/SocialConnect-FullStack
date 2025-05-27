@@ -7,25 +7,19 @@ import { editProfileSchema } from "@/schemas/editProfileSchema";
 
 export async function POST(request: Request) {
   try {
-    // Get the current session
     const session = await getServerSession(authOptions);
     
     if (!session || !session.user) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    // Connect to the database
     await dbConnect();
-    
-    // Parse and validate the request body
     const body = await request.json();
     const validatedData = editProfileSchema.parse(body);
-    
-    // Check if username is being changed and if it's unique
     if (validatedData.username) {
       const existingUserWithUsername = await User.findOne({ 
         username: validatedData.username,
-        email: { $ne: session.user.email }  // Exclude the current user
+        email: { $ne: session.user.email }
       });
       
       if (existingUserWithUsername) {
