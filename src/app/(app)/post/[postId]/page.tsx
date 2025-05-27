@@ -20,7 +20,7 @@ interface Comment {
 
 export default function PostPage() {
   const { postId } = useParams();
-  const [post, setPost] = useState<Post | null>(null); // <-- Use shared type here
+  const [post, setPost] = useState<Post>();
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [comments, setComments] = useState<Comment[]>([]);

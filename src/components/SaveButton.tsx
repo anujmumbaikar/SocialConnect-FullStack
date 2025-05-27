@@ -10,7 +10,7 @@ const SaveButton = ({ postId }: { postId: string }) => {
     try {
       const response = await axios.post(`/api/post/${postId}/save`);
       if (response.status === 200 || response.status === 201) {
-        setIsSaved((prev) => !prev);
+        setIsSaved((prev) => !prev); // Toggle the save state
         toast.success(response.data.message);
       }
     } catch (error) {
@@ -21,7 +21,11 @@ const SaveButton = ({ postId }: { postId: string }) => {
 
   return (
     <button onClick={handleToggleSave} className="text-gray-500 hover:text-gray-800">
-      <Bookmark className={`h-5 w-5 ${isSaved ? "text-blue-500 fill-blue-500" : ""}`} />
+      {isSaved ? (
+        <Bookmark className="h-5 w-5 text-blue-500 fill-blue-500" fill="currentColor" />
+      ) : (
+        <Bookmark className="h-5 w-5" />
+      )}
     </button>
   );
 };
