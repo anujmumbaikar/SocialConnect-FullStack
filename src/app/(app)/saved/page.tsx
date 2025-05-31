@@ -53,7 +53,6 @@ const SavedContentGrid = () => {
           <video
             src={content.reelUrl}
             className="w-full h-full object-cover"
-            autoPlay
             muted
             loop
           />

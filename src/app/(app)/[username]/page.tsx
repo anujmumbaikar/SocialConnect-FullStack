@@ -367,7 +367,6 @@ export default function ProfilePage() {
                   playsInline
                   preload="metadata"
                   poster={reel.thumbnailUrl || ""}
-                  // Play/pause on hover
                   onMouseOver={(e) => e.currentTarget.play()}
                   onMouseOut={(e) => {
                     e.currentTarget.pause();
