@@ -1,16 +1,7 @@
 # SocialConnect
----
+
 SocialConnect is a modern and scalable social media app built using Next.js, MongoDB, NextAuth, and ImageKit. Users can upload posts and reels, interact with others, explore trending content, and manage social profiles with a clean UI powered by ShadCN.
-DashBoard Page:
-![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/dashboard.png)
-Profile Page:
-![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Profile.png)
-Explore Page:
-![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Explore.png)
-Upload Page:
-![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Upload.png)
-Each Post:
-![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Each%20Posts.png)
+
 ---
 
 ## 🔧 Tech Stack
