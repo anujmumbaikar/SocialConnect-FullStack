@@ -1,14 +1,24 @@
 # SocialConnect
-
-SocialConnect is a modern and scalable social media app built using **Next.js**, **MongoDB**, **NextAuth**, and **ImageKit**. Users can upload posts and reels, interact with others, explore trending content, and manage social profiles with a clean UI powered by ShadCN.
+---
+SocialConnect is a modern and scalable social media app built using Next.js, MongoDB, NextAuth, and ImageKit. Users can upload posts and reels, interact with others, explore trending content, and manage social profiles with a clean UI powered by ShadCN.
+DashBoard Page:
+![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/dashboard.png)
+Profile Page:
+![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Profile.png)
+Explore Page:
+![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Explore.png)
+Upload Page:
+![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Upload.png)
+Each Post:
+![image text](https://github.com/anujmumbaikar/SocialConnect-FullStack/blob/fedaed00e546e9356f024fa4dab54d770bd3a994/assets/Each%20Posts.png)
 ---
 
 ## 🔧 Tech Stack
-- **Next.js** — React framework for SSR & API routes
-- **MongoDB** — NoSQL database with Aggregation Pipelines
-- **NextAuth** — Auth with Google OAuth & email/password
-- **ImageKit** — CDN and media upload/optimization
-- **Tailwind CSS + ShadCN** — UI/UX and component styling
+- Next.js — React framework for SSR & API routes
+- MongoDB — NoSQL database with Aggregation Pipelines
+- NextAuth — Auth with Google OAuth & email/password
+- ImageKit — CDN and media upload/optimization
+- Tailwind CSS + ShadCN — UI/UX and component styling
 
 ---
 
@@ -31,17 +41,17 @@ SocialConnect is a modern and scalable social media app built using **Next.js**,
 - Follow/unfollow users and notification system
 ---
 
-## MongoDB Aggregation Pipelines — 
-I use **MongoDB Aggregation Pipelines** for better performance and scalability across user interactions (likes, saves, followers, etc.).
+## MongoDB Aggregation Pipelines
+I use MongoDB Aggregation Pipelines for better performance and scalability across user interactions (likes, saves, followers, etc.).
 
 ### Why?
-Instead of storing **likes directly inside the post document**, which leads to array updates and performance issues, we moved such data into **separate collections** and join them efficiently using aggregation.
+Instead of storing likes directly inside the post document, which leads to array updates and performance issues, we moved such data into separate collections and join them efficiently using aggregation.
 
-### For E.g :
-> _"Instead of saving likes into the same posts table, even if a single person again dislikes, then the whole array sorting would be expensive."_  
+### For Example:
+> "Instead of saving likes into the same posts table, even if a single person again dislikes, then the whole array sorting would be expensive."  
 We apply this same strategy for:
 - Followers / Following
-- Comments.
+- Comments
 ---
 
 ## Environment Variables
@@ -59,7 +69,7 @@ EMAIL_PASS=
 IMAGEKIT_PUBLIC_KEY=
 IMAGEKIT_PRIVATE_KEY=
 IMAGEKIT_URL_ENDPOINT=
-```
+
 ---
 
 ## Getting Started
