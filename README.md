@@ -41,8 +41,8 @@ Instead of storing likes directly inside the post document, which leads to array
 ### For Example:
 > "Instead of saving likes into the same posts table, even if a single person again dislikes, then the whole array sorting would be expensive."  
 We apply this same strategy for:
-- Followers / Following
-- Comments
+> Followers / Following
+> Comments
 ---
 
 ## Environment Variables
