@@ -39,8 +39,8 @@ I use MongoDB Aggregation Pipelines for better performance and scalability acros
 Instead of storing likes directly inside the post document, which leads to array updates and performance issues, we moved such data into separate collections and join them efficiently using aggregation.
 
 ### For Example:
-> "Instead of saving likes into the same posts table, even if a single person again dislikes, then the whole array sorting would be expensive."  
-We apply this same strategy for:
+> "Instead of saving likes into the same posts table, even if a single person again dislikes, then the whole array sorting would be expensive."
+> I apply this same strategy for:
 > Followers / Following
 > Comments
 ---
